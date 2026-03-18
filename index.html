@@ -9,12 +9,12 @@
 :root{--bg:#0b0e14;--c1:#12161f;--c2:#181d28;--c3:#1e2330;--bd:#262d3d;--am:#e5a000;--amb:#fbbf24;--amd:rgba(229,160,0,.12);--bl:#3b82f6;--bld:rgba(59,130,246,.12);--gn:#10b981;--gnd:rgba(16,185,129,.12);--rd:#ef4444;--t1:#e2e5ec;--t2:#99a1b3;--t3:#636d83}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.5}
 .hdr{position:sticky;top:0;z-index:99;background:var(--c1);border-bottom:2px solid var(--am);padding:14px 20px}
-.hdr-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hdr-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-i{width:40px;height:40px;border-radius:10px;background:var(--am);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#0b0e14}
-.logo h1{font-size:17px;font-weight:700}.logo small{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:2px}
+.logo h1{font-size:17px;font-weight:700}.logo small{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:2px;display:block}
 .badge{font-size:10px;color:var(--t3);border:1px solid var(--bd);padding:4px 14px;border-radius:20px;letter-spacing:1px;text-transform:uppercase}
-.wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px}
 .card{background:var(--c1);border:1px solid var(--bd);border-radius:10px;margin-bottom:18px;overflow:hidden}
 .card-hd{padding:13px 18px;background:var(--c2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .card-bd{padding:18px}
@@ -33,22 +33,35 @@ select{cursor:pointer}
 .collapsed .chev{transform:rotate(-90deg)}
 .chev{transition:transform .2s;display:inline-block;color:var(--t3);font-size:15px}
 .ract{display:flex;align-items:center;gap:8px}
-.prow{display:flex;align-items:center;gap:8px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;margin-bottom:7px}
+
+/* Pipe rows - enhanced with qty */
+.prow{display:flex;align-items:center;gap:8px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;margin-bottom:7px;flex-wrap:wrap}
 .prow .pi{font-size:11px;color:var(--t3);min-width:24px;font-weight:600}
-.prow select{flex:1;padding:6px 10px;font-size:13px}
+.prow select{flex:2;padding:6px 10px;font-size:13px;min-width:80px}
+.prow .qty-wrap{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.prow .qty-wrap label{margin:0;white-space:nowrap;font-size:10px;min-width:auto}
+.prow .qty-wrap input{width:55px;padding:6px 8px;font-size:13px;text-align:center}
 .prow .pod{font-size:11px;color:var(--t3);min-width:80px;text-align:right;font-weight:600}
 .plbl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);font-weight:700;margin:14px 0 8px}
+
+/* Buttons */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
 .btn-am{background:var(--am);color:#0b0e14}.btn-am:hover{background:var(--amb)}
 .btn-gh{background:var(--c1);color:var(--t1);border:1px solid var(--bd)}.btn-gh:hover{background:var(--c2)}
 .btn-da{background:transparent;color:var(--am);border:2px dashed var(--am);opacity:.7}.btn-da:hover{opacity:1;background:var(--amd)}
-.btn-ap{width:100%;padding:8px;background:var(--amd);color:var(--am);border:1px dashed rgba(229,160,0,.4);border-radius:7px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:4px;transition:all .15s}
+.btn-bl{background:var(--bl);color:#fff}.btn-bl:hover{background:#2563eb}
+.btn-gn{background:var(--gn);color:#fff}.btn-gn:hover{background:#059669}
+.btn-sm{padding:7px 14px;font-size:12px}
+.btn-ap{width:100%;padding:8px;background:var(--amd);color:var(--am);border:1px dashed rgba(229,160,0,.4);border-radius:7px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:4px}
 .btn-ap:hover{background:rgba(229,160,0,.2)}
-.btn-x{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;font-size:13px;transition:all .15s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btn-x{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;font-size:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .btn-x:hover{color:var(--rd);background:rgba(239,68,68,.1)}
 .btn-dr{font-size:12px;padding:3px 10px;border-radius:6px;background:transparent;color:var(--t3);border:none;cursor:pointer;font-family:inherit}
 .btn-dr:hover{color:var(--rd);background:rgba(239,68,68,.1)}
-.tbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+.tbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.tbar-sep{width:1px;background:var(--bd);margin:0 4px;align-self:stretch}
+
+/* Results */
 #results{display:none}
 #results.show{display:block}
 .bdg{font-size:10px;font-weight:700;padding:3px 11px;border-radius:16px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
@@ -69,11 +82,41 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 .mt td{padding:9px 12px;border-bottom:1px solid var(--bd);color:var(--t2)}
 .mt tr:last-child td{border-bottom:none}
 .mt .q{font-weight:700;color:var(--t1);text-align:right}
+/* Color-coded category rows */
+.mt .cat-struct td{border-left:3px solid var(--am);background:rgba(229,160,0,.04)}
+.mt .cat-fix td{border-left:3px solid var(--bl);background:rgba(59,130,246,.04)}
+.mt .cat-clamp td{border-left:3px solid var(--gn);background:rgba(16,185,129,.04)}
+.mt .cat-hw td{border-left:3px solid #a855f7;background:rgba(168,85,247,.04)}
+.mt .cat-hdr td{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700;background:var(--c3);padding:7px 12px}
+
+/* Chart */
+.chart-section{margin-top:20px}
+.chart-bar-wrap{margin-bottom:6px}
+.chart-label{font-size:11px;color:var(--t2);margin-bottom:2px;display:flex;justify-content:space-between}
+.chart-label span{font-weight:700;color:var(--t1)}
+.chart-track{height:22px;background:var(--c3);border-radius:4px;overflow:hidden}
+.chart-fill{height:100%;border-radius:4px;min-width:2px;transition:width .6s ease}
+
+/* Grand Summary */
 .grd{background:linear-gradient(135deg,var(--c1),var(--c2));border:2px solid var(--am);border-radius:12px;padding:22px;margin-top:24px;box-shadow:0 0 40px rgba(229,160,0,.06)}
 .grd h2{font-size:15px;font-weight:800;color:var(--am);margin-bottom:4px}
 .grd .sub{font-size:13px;color:var(--t3);margin-bottom:16px}
-@media print{body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}.hdr{position:relative;background:#fff;border-color:#333}.card,.grd{background:#fff;border-color:#bbb;break-inside:avoid}.card-hd{background:#f3f3f3!important}.st{background:#f5f5f5;border-color:#ccc}.st .sv{color:#b45309}.cnote{background:#fffbeb;border-color:#b45309}.mt th{background:#eee}.grd{border-color:#b45309;background:#fffbeb}.noprint{display:none!important}#results.show{display:block}}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0;font-size:11px;color:var(--t2)}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-dot{width:10px;height:10px;border-radius:3px}
+
+/* File input hidden */
+#fileImport{display:none}
+
+@media print{body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}.hdr{position:relative;background:#fff;border-color:#333}.card,.grd{background:#fff;border-color:#bbb;break-inside:avoid}.card-hd{background:#f3f3f3!important}.st{background:#f5f5f5;border-color:#ccc}.st .sv{color:#b45309}.cnote{background:#fffbeb;border-color:#b45309}.mt th{background:#eee}.grd{border-color:#b45309;background:#fffbeb}.noprint{display:none!important}#results.show{display:block}.chart-track{background:#eee}}
 </style>
+<!-- PDF Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<!-- Excel Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -102,76 +145,74 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
     <button class="btn btn-da" id="btnAdd"></button>
     <button class="btn btn-am" id="btnCalc">&#9654; Calculate</button>
     <button class="btn btn-gh" id="btnReset">&#8634; Reset</button>
-    <button class="btn btn-gh" onclick="window.print()">&#128438; Print</button>
+    <div class="tbar-sep"></div>
+    <button class="btn btn-bl btn-sm" id="btnPdf">&#128196; Export PDF</button>
+    <button class="btn btn-gn btn-sm" id="btnXlsx">&#128202; Export Excel</button>
+    <button class="btn btn-gh btn-sm" onclick="window.print()">&#128438; Print</button>
+    <div class="tbar-sep"></div>
+    <button class="btn btn-gh btn-sm" id="btnSave">&#128190; Save Project</button>
+    <button class="btn btn-gh btn-sm" id="btnLoad">&#128194; Load Project</button>
+    <input type="file" id="fileImport" accept=".json">
   </div>
   <div id="results"></div>
 </div>
 
 <script>
 // =============================================
-// PIPE DATA - Cosmoplast uPVC PN15 BSEN
-// Keys are CLEAN strings (no quote chars!)
+// PIPE DATA
 // =============================================
 var PK = ['1','1.5','2','2.5','3','4','6','8','10','12'];
-var P_LABEL = {};  // display label
-var P_OD = {};     // outer diameter mm
-var P_DN = {};     // DN designation
-var P_INCH = {};   // inch display
-
+var P_OD={},P_DN={},P_INCH={},P_LABEL={};
 (function(){
-  var ods =  [32,50,63,75,90,110,160,225,280,315];
-  var dns =  ['DN25','DN40','DN50','DN65','DN80','DN100','DN150','DN200','DN250','DN300'];
+  var od=[32,50,63,75,90,110,160,225,280,315];
+  var dn=['DN25','DN40','DN50','DN65','DN80','DN100','DN150','DN200','DN250','DN300'];
   for(var i=0;i<PK.length;i++){
-    var k = PK[i];
-    P_OD[k] = ods[i];
-    P_DN[k] = dns[i];
-    P_INCH[k] = k + '"';
-    P_LABEL[k] = k + '" (' + dns[i] + ' - OD ' + ods[i] + 'mm)';
+    P_OD[PK[i]]=od[i]; P_DN[PK[i]]=dn[i];
+    P_INCH[PK[i]]=PK[i]+'"';
+    P_LABEL[PK[i]]=PK[i]+'" ('+dn[i]+' - OD '+od[i]+'mm)';
   }
 })();
+var TN={t1:'Full C-Channel Support',t2:'Threaded Rod & C-Channel Combo',t3:'Threaded Rod with Rubber Clamp'};
+var SP=1.5,OL=300,GP=6,GE=3,VH=80;
 
-var TN = {t1:'Full C-Channel Support', t2:'Threaded Rod & C-Channel Combo', t3:'Threaded Rod with Rubber Clamp'};
-
-var SP = 1.5;    // spacing m
-var OL = 300;    // order length cm
-var GP = 6;      // gap between pipes cm
-var GE = 3;      // gap end cm
-var VH = 80;     // vertical height cm
+// Color coding
+var CAT_COLORS = {
+  struct: {color:'#e5a000',label:'Structural (C-Channel / Rod)'},
+  fix:    {color:'#3b82f6',label:'Fixings (Bolts, Nuts, Washers)'},
+  clamp:  {color:'#10b981',label:'Clamps / U-Straps'},
+  hw:     {color:'#a855f7',label:'U-Strap Hardware (8mm/10mm)'}
+};
 
 // =============================================
 // STATE
 // =============================================
-var R = [];       // routes
-var NID = 0;      // next id
+var R=[], NID=0, CALC_DATA=null;
 
 function newR(){
   NID++;
-  return {id:NID, nm:'', ds:'', tp:'t1', col:false, pp:['2']};
+  return {id:NID, nm:'', ds:'', tp:'t1', col:false, pp:[{sz:'2',qty:1}]};
 }
-
-function findR(id){
-  for(var i=0;i<R.length;i++) if(R[i].id===id) return R[i];
-  return null;
-}
+function findR(id){for(var i=0;i<R.length;i++) if(R[i].id===id) return R[i]; return null;}
 
 // =============================================
-// SYNC DOM -> STATE
+// SYNC
 // =============================================
 function sync(){
   for(var i=0;i<R.length;i++){
-    var r=R[i], e;
-    e=document.getElementById('rn'+r.id); if(e) r.nm=e.value;
-    e=document.getElementById('rd'+r.id); if(e) r.ds=e.value;
-    e=document.getElementById('rt'+r.id); if(e) r.tp=e.value;
-    e=document.getElementById('rc'+r.id); if(e) r.col=e.classList.contains('collapsed');
+    var r=R[i],e;
+    e=document.getElementById('rn'+r.id);if(e)r.nm=e.value;
+    e=document.getElementById('rd'+r.id);if(e)r.ds=e.value;
+    e=document.getElementById('rt'+r.id);if(e)r.tp=e.value;
+    e=document.getElementById('rc'+r.id);if(e)r.col=e.classList.contains('collapsed');
     for(var j=0;j<r.pp.length;j++){
-      e=document.getElementById('ps'+r.id+'x'+j); if(e) r.pp[j]=e.value;
+      e=document.getElementById('ps'+r.id+'x'+j);if(e) r.pp[j].sz=e.value;
+      e=document.getElementById('pq'+r.id+'x'+j);if(e) r.pp[j].qty=parseInt(e.value)||1;
     }
   }
 }
 
 // =============================================
-// BUILD SELECT OPTIONS (pipe sizes)
+// BUILD SELECT OPTIONS
 // =============================================
 function sOpts(sel){
   var h='';
@@ -185,20 +226,19 @@ function sOpts(sel){
 }
 
 // =============================================
-// RENDER PIPES for one route (partial update)
+// RENDER PIPES (partial)
 // =============================================
 function drawP(rid){
-  var r=findR(rid);
-  if(!r) return;
-  var box=document.getElementById('pb'+rid);
-  if(!box) return;
+  var r=findR(rid);if(!r)return;
+  var box=document.getElementById('pb'+rid);if(!box)return;
   var h='';
   for(var j=0;j<r.pp.length;j++){
-    var sz=r.pp[j];
+    var p=r.pp[j];
     h+='<div class="prow">';
     h+='<span class="pi">#'+(j+1)+'</span>';
-    h+='<select id="ps'+rid+'x'+j+'" onchange="chgP('+rid+','+j+',this.value)">'+sOpts(sz)+'</select>';
-    h+='<span class="pod" id="po'+rid+'x'+j+'">OD '+P_OD[sz]+'mm</span>';
+    h+='<select id="ps'+rid+'x'+j+'" onchange="chgP('+rid+','+j+',this.value)">'+sOpts(p.sz)+'</select>';
+    h+='<div class="qty-wrap"><label>Runs:</label><input type="number" id="pq'+rid+'x'+j+'" value="'+p.qty+'" min="1" max="50" step="1"></div>';
+    h+='<span class="pod" id="po'+rid+'x'+j+'">OD '+P_OD[p.sz]+'mm</span>';
     if(r.pp.length>1){
       h+='<button class="btn-x" type="button" onclick="delP('+rid+','+j+')">&#10005;</button>';
     } else {
@@ -216,140 +256,98 @@ function drawAll(){
   var box=document.getElementById('routeBox');
   var h='';
   for(var i=0;i<R.length;i++){
-    var r=R[i];
-    var n=i+1;
-    var nn=n<10?'0'+n:''+n;
+    var r=R[i],n=i+1,nn=n<10?'0'+n:''+n;
     var cc=r.col?' collapsed':'';
     var nmE=r.nm.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var tOpts='<option value="t1"'+(r.tp==='t1'?' selected':'')+'>Full C-Channel</option>';
+    tOpts+='<option value="t2"'+(r.tp==='t2'?' selected':'')+'>Threaded Rod + C-Channel</option>';
+    tOpts+='<option value="t3"'+(r.tp==='t3'?' selected':'')+'>Threaded Rod + Rubber Clamp</option>';
+    var rmBtn=R.length>1?'<button class="btn-dr noprint" type="button" onclick="event.stopPropagation();delR('+r.id+')">Remove</button>':'';
 
-    h+='<div class="card'+cc+'" id="rc'+r.id+'">';
-    h+='<div class="card-hd rhead" onclick="togR('+r.id+')">';
+    h+='<div class="card'+cc+'" id="rc'+r.id+'"><div class="card-hd rhead" onclick="togR('+r.id+')">';
     h+='<div class="rtit"><span class="rnum">'+n+'</span>PIPE ROUTE '+nn+'</div>';
-    h+='<div class="ract">';
-    if(R.length>1) h+='<button class="btn-dr noprint" type="button" onclick="event.stopPropagation();delR('+r.id+')">Remove</button>';
-    h+='<span class="chev">&#9662;</span></div></div>';
-
+    h+='<div class="ract">'+rmBtn+'<span class="chev">&#9662;</span></div></div>';
     h+='<div class="card-bd"><div class="row3">';
     h+='<div><label>Route Description</label><input type="text" id="rn'+r.id+'" value="'+nmE+'" placeholder="e.g. Plant Room to Pool"></div>';
     h+='<div><label>Distance (m)</label><input type="number" id="rd'+r.id+'" value="'+r.ds+'" placeholder="0" min="0" step="0.1"></div>';
-    h+='<div><label>Support Type</label><select id="rt'+r.id+'">';
-    h+='<option value="t1"'+(r.tp==='t1'?' selected':'')+'>Full C-Channel</option>';
-    h+='<option value="t2"'+(r.tp==='t2'?' selected':'')+'>Threaded Rod + C-Channel</option>';
-    h+='<option value="t3"'+(r.tp==='t3'?' selected':'')+'>Threaded Rod + Rubber Clamp</option>';
-    h+='</select></div></div>';
-
-    h+='<div class="plbl">Pipes in this Route</div>';
+    h+='<div><label>Support Type</label><select id="rt'+r.id+'">'+tOpts+'</select></div></div>';
+    h+='<div class="plbl">Pipe Sizes &amp; Number of Runs</div>';
     h+='<div id="pb'+r.id+'"></div>';
-    h+='<button class="btn-ap noprint" type="button" onclick="addP('+r.id+')">+ Add Pipe</button>';
+    h+='<button class="btn-ap noprint" type="button" onclick="addP('+r.id+')">+ Add Pipe Size</button>';
     h+='</div></div>';
   }
   box.innerHTML=h;
-
-  // Draw pipes into containers
   for(var i=0;i<R.length;i++) drawP(R[i].id);
-
-  // Update add route button
   var ab=document.getElementById('btnAdd');
   if(R.length>=10){ab.style.display='none';}
   else{ab.style.display='';ab.textContent='+ Add Pipe Route '+(R.length+1);}
 }
 
 // =============================================
-// GLOBAL EVENT HANDLERS
+// GLOBAL HANDLERS
 // =============================================
-function togR(id){
-  var el=document.getElementById('rc'+id);
-  if(el) el.classList.toggle('collapsed');
-}
-
-function delR(id){
-  sync();
-  R=R.filter(function(r){return r.id!==id;});
-  drawAll();
-}
-
+function togR(id){var el=document.getElementById('rc'+id);if(el)el.classList.toggle('collapsed');}
+function delR(id){sync();R=R.filter(function(r){return r.id!==id;});drawAll();}
 function addP(rid){
-  var r=findR(rid);
-  if(!r) return;
-  // sync just this route's pipes
+  var r=findR(rid);if(!r)return;
   for(var j=0;j<r.pp.length;j++){
-    var e=document.getElementById('ps'+rid+'x'+j);
-    if(e) r.pp[j]=e.value;
+    var e=document.getElementById('ps'+rid+'x'+j);if(e) r.pp[j].sz=e.value;
+    e=document.getElementById('pq'+rid+'x'+j);if(e) r.pp[j].qty=parseInt(e.value)||1;
   }
-  r.pp.push('2');
+  r.pp.push({sz:'2',qty:1});
   drawP(rid);
 }
-
 function delP(rid,idx){
-  var r=findR(rid);
-  if(!r||r.pp.length<=1) return;
+  var r=findR(rid);if(!r||r.pp.length<=1)return;
   for(var j=0;j<r.pp.length;j++){
-    var e=document.getElementById('ps'+rid+'x'+j);
-    if(e) r.pp[j]=e.value;
+    var e=document.getElementById('ps'+rid+'x'+j);if(e) r.pp[j].sz=e.value;
+    e=document.getElementById('pq'+rid+'x'+j);if(e) r.pp[j].qty=parseInt(e.value)||1;
   }
-  r.pp.splice(idx,1);
-  drawP(rid);
+  r.pp.splice(idx,1);drawP(rid);
 }
-
 function chgP(rid,idx,val){
-  var r=findR(rid);
-  if(r) r.pp[idx]=val;
+  var r=findR(rid);if(r)r.pp[idx].sz=val;
   var od=document.getElementById('po'+rid+'x'+idx);
-  if(od) od.textContent='OD '+P_OD[val]+'mm';
+  if(od)od.textContent='OD '+P_OD[val]+'mm';
 }
 
 // Toolbar
-document.getElementById('btnAdd').onclick=function(){
-  if(R.length>=10) return;
-  sync();
-  R.push(newR());
-  drawAll();
-};
-
-document.getElementById('btnCalc').onclick=function(){
-  sync();
-  runCalc();
-};
-
-document.getElementById('btnReset').onclick=function(){
-  R=[];NID=0;
-  document.getElementById('projName').value='';
-  document.getElementById('projRef').value='';
-  var el=document.getElementById('results');
-  el.innerHTML='';el.classList.remove('show');
-  R.push(newR());
-  drawAll();
-};
+document.getElementById('btnAdd').onclick=function(){if(R.length>=10)return;sync();R.push(newR());drawAll();};
+document.getElementById('btnCalc').onclick=function(){sync();runCalc();};
+document.getElementById('btnReset').onclick=function(){R=[];NID=0;document.getElementById('projName').value='';document.getElementById('projRef').value='';document.getElementById('results').innerHTML='';document.getElementById('results').classList.remove('show');CALC_DATA=null;R.push(newR());drawAll();};
 
 // =============================================
-// CALCULATION
+// CALCULATION - expand qty into pipe array
 // =============================================
 function runCalc(){
   var pN=document.getElementById('projName').value||'Untitled Project';
   var pR=document.getElementById('projRef').value||'-';
   var all=[],grand={};
-
   for(var i=0;i<R.length;i++){
-    var r=R[i];
-    var num=i+1;
+    var r=R[i],num=i+1;
     var name=r.nm||('Pipe Route '+(num<10?'0'+num:num));
-    var dist=parseFloat(r.ds);
-    if(isNaN(dist)||dist<=0) continue;
-    var res=calc1(name,num,dist,r.tp,r.pp.slice());
+    var dist=parseFloat(r.ds);if(isNaN(dist)||dist<=0)continue;
+    // Expand pipes: each entry {sz, qty} becomes qty entries
+    var pipes=[];
+    for(var j=0;j<r.pp.length;j++){
+      var q=r.pp[j].qty||1;
+      for(var k=0;k<q;k++) pipes.push(r.pp[j].sz);
+    }
+    var res=calc1(name,num,dist,r.tp,pipes,r.pp);
     all.push(res);
     var mk=Object.keys(res.mat);
     for(var m=0;m<mk.length;m++) grand[mk[m]]=(grand[mk[m]]||0)+res.mat[mk[m]];
   }
+  CALC_DATA={all:all,grand:grand,pN:pN,pR:pR};
   showRes(all,grand,pN,pR);
 }
 
-function calc1(name,num,dist,type,pipes){
+function calc1(name,num,dist,type,pipes,pipeEntries){
   var nP=pipes.length;
   var nS=Math.floor(dist/SP)+1;
   var sumOD=0;
   for(var i=0;i<pipes.length;i++) sumOD+=P_OD[pipes[i]]/10;
   var hori=sumOD+GP*(nP-1)+GE*2;
-
   var sm=0,lg=0;
   for(var i=0;i<pipes.length;i++){if(P_OD[pipes[i]]<=63)sm++;else lg++;}
 
@@ -358,56 +356,69 @@ function calc1(name,num,dist,type,pipes){
   function ustraps(){
     for(var i=0;i<pipes.length;i++){
       var p=pipes[i];
-      var k='U-Strap Rubber Lined - '+P_INCH[p]+' ('+P_DN[p]+', OD '+P_OD[p]+'mm)';
+      var k='U-Strap Rubber Lined - '+P_INCH[p]+' ('+P_DN[p]+')';
       mat[k]=(mat[k]||0)+nS;
     }
-    if(sm>0){
-      mat['8mm Nut (U-Strap, pipes up to 2 inch)']=sm*nS*2;
-      mat['8mm Bolt (U-Strap, pipes up to 2 inch)']=sm*nS*2;
-      mat['8mm Washer (U-Strap, pipes up to 2 inch)']=sm*nS*2;
-    }
-    if(lg>0){
-      mat['10mm Nut (U-Strap, pipes above 2 inch)']=lg*nS*2;
-      mat['10mm Bolt (U-Strap, pipes above 2 inch)']=lg*nS*2;
-      mat['10mm Washer (U-Strap, pipes above 2 inch)']=lg*nS*2;
-    }
+    if(sm>0){mat['8mm Nut (U-Strap, pipes up to 2in)']=sm*nS*2;mat['8mm Bolt (U-Strap, pipes up to 2in)']=sm*nS*2;mat['8mm Washer (U-Strap, pipes up to 2in)']=sm*nS*2;}
+    if(lg>0){mat['10mm Nut (U-Strap, pipes above 2in)']=lg*nS*2;mat['10mm Bolt (U-Strap, pipes above 2in)']=lg*nS*2;mat['10mm Washer (U-Strap, pipes above 2in)']=lg*nS*2;}
   }
 
   if(type==='t1'){
-    var vt=VH*2;var perS=hori+vt;cCh=perS*nS;
+    var vt=VH*2,perS=hori+vt;cCh=perS*nS;
     mat['C-Channel 41x41mm - 3m lengths']=Math.ceil(cCh/OL);
-    mat['4-Hole L-Clamp']=nS*2;
-    mat['10mm x 20mm GL Bolt']=nS*8;
-    mat['10mm Spring Nut']=nS*4;
-    mat['10mm Unifix']=nS*4;
+    mat['4-Hole L-Clamp']=nS*2;mat['10mm x 20mm GL Bolt']=nS*8;mat['10mm Spring Nut']=nS*4;mat['10mm Unifix']=nS*4;
     ustraps();
-    desc.push('Horizontal: '+hori.toFixed(1)+' cm + Vertical: '+vt+' cm = <b>'+perS.toFixed(1)+' cm</b> per support');
-    desc.push('Total C-Channel: '+cCh.toFixed(1)+' cm = <b>'+Math.ceil(cCh/OL)+' x 3m lengths</b>');
+    desc.push('Horizontal: '+hori.toFixed(1)+'cm + Vertical: '+vt+'cm = <b>'+perS.toFixed(1)+'cm</b>/support');
+    desc.push('Total C-Channel: '+cCh.toFixed(1)+'cm = <b>'+Math.ceil(cCh/OL)+' x 3m</b>');
   } else if(type==='t2'){
     cCh=hori*nS;var vR=VH*2;rod=vR*nS;
     mat['C-Channel 41x41mm - 3m lengths']=Math.ceil(cCh/OL);
     mat['10mm Threaded Rod - 3m lengths']=Math.ceil(rod/OL);
     mat['10mm Nut']=nS*6;mat['10mm Washer']=nS*6;mat['10mm Unifix']=nS*2;
     ustraps();
-    desc.push('Horizontal C-Channel: '+hori.toFixed(1)+' cm per support');
-    desc.push('Vertical Threaded Rod: '+vR+' cm per support (80cm x 2)');
-    desc.push('Total C-Channel: '+cCh.toFixed(1)+' cm = <b>'+Math.ceil(cCh/OL)+' x 3m lengths</b>');
-    desc.push('Total Threaded Rod: '+rod.toFixed(1)+' cm = <b>'+Math.ceil(rod/OL)+' x 3m lengths</b>');
+    desc.push('Horizontal C-Channel: '+hori.toFixed(1)+'cm/support');
+    desc.push('Vertical Rod: '+(VH*2)+'cm/support (80cm x 2)');
+    desc.push('Total C-Channel: '+cCh.toFixed(1)+'cm = <b>'+Math.ceil(cCh/OL)+' x 3m</b>');
+    desc.push('Total Rod: '+rod.toFixed(1)+'cm = <b>'+Math.ceil(rod/OL)+' x 3m</b>');
   } else {
     var vR=VH*2;rod=vR*nS;
     mat['10mm Threaded Rod - 3m lengths']=Math.ceil(rod/OL);
     mat['10mm Nut']=nS*2;mat['10mm Washer']=nS*2;mat['10mm Unifix']=nS*1;
     for(var i=0;i<pipes.length;i++){
-      var p=pipes[i];
-      var k='Rubber Clamp - '+P_INCH[p]+' ('+P_DN[p]+', OD '+P_OD[p]+'mm)';
+      var p=pipes[i],k='Rubber Clamp - '+P_INCH[p]+' ('+P_DN[p]+')';
       mat[k]=(mat[k]||0)+nS;
     }
-    desc.push('Vertical Threaded Rod: '+vR+' cm per support (80cm x 2)');
-    desc.push('No horizontal C-Channel required');
-    desc.push('Total Threaded Rod: '+rod.toFixed(1)+' cm = <b>'+Math.ceil(rod/OL)+' x 3m lengths</b>');
+    desc.push('Vertical Rod: '+(VH*2)+'cm/support (80cm x 2)');
+    desc.push('No horizontal C-Channel');
+    desc.push('Total Rod: '+rod.toFixed(1)+'cm = <b>'+Math.ceil(rod/OL)+' x 3m</b>');
   }
+  return {name:name,num:num,dist:dist,type:type,pipes:pipes,pipeEntries:pipeEntries,nS:nS,hori:hori,mat:mat,desc:desc};
+}
 
-  return {name:name,num:num,dist:dist,type:type,pipes:pipes,nS:nS,hori:hori,mat:mat,desc:desc};
+// =============================================
+// CATEGORIZE material items
+// =============================================
+function getCat(item){
+  var il=item.toLowerCase();
+  if(il.indexOf('c-channel')>=0||il.indexOf('threaded rod')>=0) return 'struct';
+  if(il.indexOf('u-strap')>=0||il.indexOf('rubber clamp')>=0) return 'clamp';
+  if(il.indexOf('(u-strap')>=0) return 'hw';
+  if(il.indexOf('l-clamp')>=0||il.indexOf('bolt')>=0||il.indexOf('nut')>=0||il.indexOf('washer')>=0||il.indexOf('unifix')>=0||il.indexOf('spring')>=0) return 'fix';
+  return 'fix';
+}
+function getCatClass(item){
+  var il=item.toLowerCase();
+  if(il.indexOf('c-channel')>=0||il.indexOf('threaded rod')>=0) return 'cat-struct';
+  if(il.indexOf('u-strap rubber')>=0||il.indexOf('rubber clamp')>=0) return 'cat-clamp';
+  if(il.indexOf('u-strap')>=0&&(il.indexOf('nut')>=0||il.indexOf('bolt')>=0||il.indexOf('washer')>=0)) return 'cat-hw';
+  return 'cat-fix';
+}
+function getCatColor(item){
+  var c=getCat(item);
+  if(c==='struct')return CAT_COLORS.struct.color;
+  if(c==='clamp')return CAT_COLORS.clamp.color;
+  if(c==='hw')return CAT_COLORS.hw.color;
+  return CAT_COLORS.fix.color;
 }
 
 // =============================================
@@ -416,64 +427,305 @@ function calc1(name,num,dist,type,pipes){
 function showRes(all,grand,pN,pR){
   var el=document.getElementById('results');
   if(all.length===0){
-    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)"><p style="font-size:32px;margin-bottom:8px">&#9888;</p><p>Enter a distance greater than 0 for at least one route.</p></div>';
+    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)"><p style="font-size:32px;margin-bottom:8px">&#9888;</p><p>Enter a distance &gt; 0 for at least one route.</p></div>';
     el.classList.add('show');return;
   }
 
   var h='<div class="stag" style="margin-bottom:18px">Calculation Results</div>';
 
+  // Legend
+  h+='<div class="legend">';
+  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.struct.color+'"></div>'+CAT_COLORS.struct.label+'</div>';
+  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.fix.color+'"></div>'+CAT_COLORS.fix.label+'</div>';
+  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.clamp.color+'"></div>'+CAT_COLORS.clamp.label+'</div>';
+  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.hw.color+'"></div>'+CAT_COLORS.hw.label+'</div>';
+  h+='</div>';
+
   for(var i=0;i<all.length;i++){
-    var r=all[i];
-    var nn=r.num<10?'0'+r.num:''+r.num;
+    var r=all[i],nn=r.num<10?'0'+r.num:''+r.num;
     var bc=r.type==='t1'?'b1':r.type==='t2'?'b2':'b3';
 
+    // Pipe chips with qty
     var chips='';
-    for(var c=0;c<r.pipes.length;c++) chips+='<span class="chip">'+P_INCH[r.pipes[c]]+'</span>';
-
-    var odl='';
-    for(var c=0;c<r.pipes.length;c++){
-      if(c>0) odl+=' + ';
-      odl+=(P_OD[r.pipes[c]]/10).toFixed(1)+'cm';
+    for(var c=0;c<r.pipeEntries.length;c++){
+      var pe=r.pipeEntries[c];
+      chips+='<span class="chip">'+P_INCH[pe.sz]+' x '+pe.qty+' run'+(pe.qty>1?'s':'')+'</span>';
     }
 
-    var note='<b>Horizontal per support:</b> Pipe ODs ('+odl+') + '+GP+'cm x '+(r.pipes.length-1)+' gap'+(r.pipes.length-1!==1?'s':'')+' + '+GE+'cm x 2 ends = <b>'+r.hori.toFixed(1)+' cm</b>';
+    var odList='';
+    for(var c=0;c<r.pipes.length;c++){if(c>0)odList+=' + ';odList+=(P_OD[r.pipes[c]]/10).toFixed(1)+'cm';}
+
+    var note='<b>Horizontal/support:</b> Pipe ODs ('+odList+') + '+GP+'cm x '+(r.pipes.length-1)+' gaps + '+GE+'cm x 2 ends = <b>'+r.hori.toFixed(1)+'cm</b>';
     for(var d=0;d<r.desc.length;d++) note+='<br>'+r.desc[d];
 
     var rows='';
     var mk=Object.keys(r.mat);
-    for(var m=0;m<mk.length;m++) rows+='<tr><td>'+mk[m]+'</td><td class="q">'+r.mat[mk[m]]+'</td></tr>';
+    for(var m=0;m<mk.length;m++){
+      var cc2=getCatClass(mk[m]);
+      rows+='<tr class="'+cc2+'"><td>'+mk[m]+'</td><td class="q">'+r.mat[mk[m]]+'</td></tr>';
+    }
 
     h+='<div class="card"><div class="card-hd">';
     h+='<h3 style="font-size:14px;font-weight:700">Route '+nn+': '+r.name+'</h3>';
-    h+='<span class="bdg '+bc+'">'+TN[r.type]+'</span>';
-    h+='</div><div class="card-bd">';
+    h+='<span class="bdg '+bc+'">'+TN[r.type]+'</span></div><div class="card-bd">';
     h+='<div class="sts">';
     h+='<div class="st"><div class="sl">Distance</div><div class="sv">'+r.dist+'<span class="su">m</span></div></div>';
     h+='<div class="st"><div class="sl">Supports</div><div class="sv">'+r.nS+'</div></div>';
     h+='<div class="st"><div class="sl">Spacing</div><div class="sv">1.5<span class="su">m</span></div></div>';
-    h+='<div class="st"><div class="sl">Pipes</div><div class="sv">'+r.pipes.length+'</div></div>';
-    h+='</div>';
-    h+='<div class="ibar" style="margin-bottom:12px"><span>Pipe Sizes: <span class="chips">'+chips+'</span></span></div>';
+    h+='<div class="st"><div class="sl">Total Pipes</div><div class="sv">'+r.pipes.length+'</div></div></div>';
+    h+='<div class="ibar" style="margin-bottom:12px"><span>Pipes: <span class="chips">'+chips+'</span></span></div>';
     h+='<div class="cnote">'+note+'</div>';
     h+='<table class="mt"><thead><tr><th>Material Item</th><th>Qty</th></tr></thead><tbody>'+rows+'</tbody></table>';
     h+='</div></div>';
   }
 
-  var gR='';
+  // Grand Total + Chart
   var gk=Object.keys(grand);
-  for(var g=0;g<gk.length;g++) gR+='<tr><td>'+gk[g]+'</td><td class="q">'+grand[gk[g]]+'</td></tr>';
+  var maxQ=0;for(var g=0;g<gk.length;g++) if(grand[gk[g]]>maxQ) maxQ=grand[gk[g]];
+
+  var gRows='',chartH='';
+  for(var g=0;g<gk.length;g++){
+    var cc2=getCatClass(gk[g]),col=getCatColor(gk[g]);
+    gRows+='<tr class="'+cc2+'"><td>'+gk[g]+'</td><td class="q">'+grand[gk[g]]+'</td></tr>';
+    var pct=maxQ>0?Math.round(grand[gk[g]]/maxQ*100):0;
+    chartH+='<div class="chart-bar-wrap"><div class="chart-label">'+gk[g]+' <span>'+grand[gk[g]]+'</span></div>';
+    chartH+='<div class="chart-track"><div class="chart-fill" style="width:'+pct+'%;background:'+col+'"></div></div></div>';
+  }
+
   var tS=0;for(var t=0;t<all.length;t++) tS+=all[t].nS;
 
   h+='<div class="grd">';
   h+='<h2>&#9632; Grand Total - All Routes Combined</h2>';
   h+='<div class="sub">'+pN+' | Ref: '+pR+' | '+all.length+' route'+(all.length>1?'s':'')+' | '+tS+' total supports</div>';
-  h+='<table class="mt"><thead><tr><th>Material Item</th><th>Total Qty</th></tr></thead><tbody>'+gR+'</tbody></table>';
+  h+='<table class="mt"><thead><tr><th>Material Item</th><th>Total Qty</th></tr></thead><tbody>'+gRows+'</tbody></table>';
+  h+='<div class="chart-section" style="margin-top:20px"><div class="stag">Material Ordering Chart</div>'+chartH+'</div>';
   h+='</div>';
 
   el.innerHTML=h;
   el.classList.add('show');
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+// =============================================
+// EXPORT PDF
+// =============================================
+document.getElementById('btnPdf').onclick=function(){
+  if(!CALC_DATA||!CALC_DATA.all.length){alert('Please calculate first.');return;}
+  var d=CALC_DATA;
+  try{
+    var jsPDF=window.jspdf.jsPDF;
+    var doc=new jsPDF('p','mm','a4');
+    var W=210,mg=14,cw=W-mg*2;
+    var y=15;
+
+    // Header
+    doc.setFillColor(229,160,0);doc.rect(0,0,W,28,  'F');
+    doc.setTextColor(11,14,20);doc.setFontSize(16);doc.setFont('helvetica','bold');
+    doc.text('uPVC Pipe Support Calculator',mg,12);
+    doc.setFontSize(9);doc.setFont('helvetica','normal');
+    doc.text('Cosmoplast PN15 | BSEN Standard | Water In Motion LLC',mg,19);
+    doc.setFontSize(10);doc.text(d.pN+' | Ref: '+d.pR,mg,25);
+    y=35;
+
+    // Per route
+    for(var i=0;i<d.all.length;i++){
+      var r=d.all[i];
+      var nn=r.num<10?'0'+r.num:''+r.num;
+      if(y>250){doc.addPage();y=15;}
+
+      doc.setTextColor(229,160,0);doc.setFontSize(12);doc.setFont('helvetica','bold');
+      doc.text('Route '+nn+': '+r.name,mg,y);y+=5;
+      doc.setTextColor(80,80,80);doc.setFontSize(8);doc.setFont('helvetica','normal');
+      doc.text(TN[r.type]+' | Distance: '+r.dist+'m | Supports: '+r.nS+' | Pipes: '+r.pipes.length,mg,y);y+=3;
+
+      // Pipe entries
+      var peText='Pipes: ';
+      for(var c=0;c<r.pipeEntries.length;c++){
+        var pe=r.pipeEntries[c];
+        if(c>0) peText+=', ';
+        peText+=P_INCH[pe.sz]+' x '+pe.qty;
+      }
+      doc.text(peText,mg,y);y+=5;
+
+      // Material table
+      var tData=[];
+      var mk=Object.keys(r.mat);
+      for(var m=0;m<mk.length;m++) tData.push([mk[m],''+r.mat[mk[m]]]);
+
+      doc.autoTable({
+        startY:y,head:[['Material Item','Qty']],body:tData,
+        margin:{left:mg,right:mg},
+        styles:{fontSize:8,cellPadding:2},
+        headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold',fontSize:7},
+        columnStyles:{1:{halign:'right',fontStyle:'bold'}},
+        theme:'grid',
+        didParseCell:function(data){
+          if(data.section==='body'){
+            var item=data.row.cells[0].text.join('');
+            var cat=getCat(item);
+            var colors={struct:[255,248,230],fix:[235,245,255],clamp:[230,255,245],hw:[245,235,255]};
+            data.cell.styles.fillColor=colors[cat]||[255,255,255];
+          }
+        }
+      });
+      y=doc.lastAutoTable.finalY+10;
+    }
+
+    // Grand Total
+    if(y>230){doc.addPage();y=15;}
+    doc.setFillColor(229,160,0);doc.rect(mg,y-3,cw,8,'F');
+    doc.setTextColor(11,14,20);doc.setFontSize(11);doc.setFont('helvetica','bold');
+    doc.text('GRAND TOTAL - ALL ROUTES',mg+3,y+2);y+=10;
+
+    var gData=[];var gk=Object.keys(d.grand);
+    for(var g=0;g<gk.length;g++) gData.push([gk[g],''+d.grand[gk[g]]]);
+
+    doc.autoTable({
+      startY:y,head:[['Material Item','Total Qty']],body:gData,
+      margin:{left:mg,right:mg},
+      styles:{fontSize:8,cellPadding:2},
+      headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold',fontSize:7},
+      columnStyles:{1:{halign:'right',fontStyle:'bold'}},
+      theme:'grid',
+      didParseCell:function(data){
+        if(data.section==='body'){
+          var item=data.row.cells[0].text.join('');
+          var cat=getCat(item);
+          var colors={struct:[255,248,230],fix:[235,245,255],clamp:[230,255,245],hw:[245,235,255]};
+          data.cell.styles.fillColor=colors[cat]||[255,255,255];
+        }
+      }
+    });
+
+    // Footer
+    var pages=doc.internal.getNumberOfPages();
+    for(var p=1;p<=pages;p++){
+      doc.setPage(p);
+      doc.setFontSize(7);doc.setTextColor(150);
+      doc.text('Generated: '+new Date().toLocaleDateString()+' | '+d.pN+' | Water In Motion LLC',mg,290);
+      doc.text('Page '+p+'/'+pages,W-mg-20,290);
+    }
+
+    doc.save(d.pN.replace(/\s+/g,'_')+'_Pipe_Support.pdf');
+  }catch(e){alert('PDF export error: '+e.message);console.error(e);}
+};
+
+// =============================================
+// EXPORT EXCEL
+// =============================================
+document.getElementById('btnXlsx').onclick=function(){
+  if(!CALC_DATA||!CALC_DATA.all.length){alert('Please calculate first.');return;}
+  var d=CALC_DATA;
+  try{
+    var wb=XLSX.utils.book_new();
+
+    // Summary sheet
+    var sumData=[
+      ['uPVC PIPE SUPPORT CALCULATOR'],
+      ['Cosmoplast PN15 BSEN Standard'],
+      ['Project: '+d.pN,'Ref: '+d.pR,'Date: '+new Date().toLocaleDateString()],
+      [],['GRAND TOTAL - ALL ROUTES'],
+      ['Material Item','Total Qty','Category']
+    ];
+    var gk=Object.keys(d.grand);
+    for(var g=0;g<gk.length;g++){
+      var cat=getCat(gk[g]);
+      var catLabel=cat==='struct'?'Structural':cat==='fix'?'Fixings':cat==='clamp'?'Clamps/U-Straps':'U-Strap Hardware';
+      sumData.push([gk[g],d.grand[gk[g]],catLabel]);
+    }
+    var ws1=XLSX.utils.aoa_to_sheet(sumData);
+    ws1['!cols']=[{wch:50},{wch:12},{wch:20}];
+    XLSX.utils.book_append_sheet(wb,ws1,'Grand Total');
+
+    // Per route sheets
+    for(var i=0;i<d.all.length;i++){
+      var r=d.all[i];
+      var nn=r.num<10?'0'+r.num:''+r.num;
+      var rData=[
+        ['ROUTE '+nn+': '+r.name],
+        ['Support Type: '+TN[r.type]],
+        ['Distance: '+r.dist+'m','Supports: '+r.nS,'Spacing: 1.5m','Total Pipes: '+r.pipes.length],
+        []
+      ];
+      // Pipe entries
+      rData.push(['Pipe Size','No. of Runs','OD (mm)','DN']);
+      for(var c=0;c<r.pipeEntries.length;c++){
+        var pe=r.pipeEntries[c];
+        rData.push([P_INCH[pe.sz],pe.qty,P_OD[pe.sz],P_DN[pe.sz]]);
+      }
+      rData.push([]);
+      rData.push(['Material Item','Qty','Category']);
+      var mk=Object.keys(r.mat);
+      for(var m=0;m<mk.length;m++){
+        var cat=getCat(mk[m]);
+        var catLabel=cat==='struct'?'Structural':cat==='fix'?'Fixings':cat==='clamp'?'Clamps/U-Straps':'U-Strap Hardware';
+        rData.push([mk[m],r.mat[mk[m]],catLabel]);
+      }
+      var ws=XLSX.utils.aoa_to_sheet(rData);
+      ws['!cols']=[{wch:50},{wch:12},{wch:20},{wch:10}];
+      XLSX.utils.book_append_sheet(wb,ws,'Route '+nn);
+    }
+
+    XLSX.writeFile(wb,d.pN.replace(/\s+/g,'_')+'_Pipe_Support.xlsx');
+  }catch(e){alert('Excel export error: '+e.message);console.error(e);}
+};
+
+// =============================================
+// SAVE / LOAD PROJECT (JSON)
+// =============================================
+document.getElementById('btnSave').onclick=function(){
+  sync();
+  var data={
+    version:2,
+    projName:document.getElementById('projName').value,
+    projRef:document.getElementById('projRef').value,
+    routes:R,
+    nextId:NID,
+    savedAt:new Date().toISOString()
+  };
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  var fn=(data.projName||'project').replace(/\s+/g,'_')+'_pipe_support.json';
+  a.download=fn;
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById('btnLoad').onclick=function(){
+  document.getElementById('fileImport').click();
+};
+
+document.getElementById('fileImport').onchange=function(e){
+  var file=e.target.files[0];
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var data=JSON.parse(ev.target.result);
+      if(!data.routes){alert('Invalid project file.');return;}
+      document.getElementById('projName').value=data.projName||'';
+      document.getElementById('projRef').value=data.projRef||'';
+      R=data.routes;
+      NID=data.nextId||R.length;
+      // Migrate old format: if pipes are strings, convert to {sz,qty}
+      for(var i=0;i<R.length;i++){
+        for(var j=0;j<R[i].pp.length;j++){
+          if(typeof R[i].pp[j]==='string'){
+            R[i].pp[j]={sz:R[i].pp[j],qty:1};
+          }
+        }
+      }
+      document.getElementById('results').innerHTML='';
+      document.getElementById('results').classList.remove('show');
+      CALC_DATA=null;
+      drawAll();
+      alert('Project loaded successfully!');
+    }catch(err){alert('Error reading file: '+err.message);}
+  };
+  reader.readAsText(file);
+  e.target.value='';
+};
 
 // =============================================
 // INIT
