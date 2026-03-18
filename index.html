@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uPVC Pipe & Fittings Quantity Calculator</title>
+<title>uPVC Pipe, Fittings & Support Calculator</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#0b0e14;--c1:#12161f;--c2:#181d28;--c3:#1e2330;--bd:#262d3d;
   --am:#e5a000;--amb:#fbbf24;--amd:rgba(229,160,0,.12);
-  --bl:#3b82f6;--gn:#10b981;--rd:#ef4444;
-  --t1:#e2e5ec;--t2:#99a1b3;--t3:#636d83
+  --bl:#3b82f6;--bld:rgba(59,130,246,.12);
+  --gn:#10b981;--gnd:rgba(16,185,129,.12);
+  --rd:#ef4444;--t1:#e2e5ec;--t2:#99a1b3;--t3:#636d83
 }
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.5}
 .hdr{position:sticky;top:0;z-index:99;background:var(--c1);border-bottom:2px solid var(--am);padding:14px 20px}
-.hdr-in{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hdr-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-i{width:42px;height:42px;border-radius:10px;background:var(--am);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#0b0e14}
 .logo h1{font-size:18px;font-weight:700}
 .logo small{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:2px;display:block}
 .badge{font-size:10px;color:var(--t3);border:1px solid var(--bd);padding:4px 14px;border-radius:20px;letter-spacing:1px;text-transform:uppercase}
-
-.wrap{max-width:1300px;margin:0 auto;padding:24px 20px 80px}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 20px 80px}
 .card{background:var(--c1);border:1px solid var(--bd);border-radius:10px;margin-bottom:18px;overflow:hidden}
 .card-hd{padding:13px 18px;background:var(--c2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .card-bd{padding:18px}
@@ -29,25 +29,45 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .row4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-@media(max-width:900px){.row4{grid-template-columns:1fr 1fr}}
-@media(max-width:700px){.row2,.row3,.row4{grid-template-columns:1fr}}
-
+@media(max-width:1000px){.row4{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.row2,.row3,.row4{grid-template-columns:1fr}}
 label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:4px}
 input,select,textarea{width:100%;padding:10px 12px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;color:var(--t1);font-family:inherit;font-size:14px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--am);box-shadow:0 0 0 3px var(--amd)}
 select{cursor:pointer}
 textarea{min-height:180px;resize:vertical}
-
 .note{font-size:12px;color:var(--t2);background:var(--c3);border-left:3px solid var(--am);padding:10px 12px;border-radius:0 6px 6px 0;margin-top:10px}
 .small-note{font-size:11px;color:var(--t3);margin-top:8px}
-
 .btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
 .btn-am{background:var(--am);color:#0b0e14}.btn-am:hover{background:var(--amb)}
 .btn-gh{background:var(--c1);color:var(--t1);border:1px solid var(--bd)}.btn-gh:hover{background:var(--c2)}
+.btn-da{background:transparent;color:var(--am);border:2px dashed var(--am);opacity:.8}.btn-da:hover{opacity:1;background:var(--amd)}
 .btn-bl{background:var(--bl);color:#fff}.btn-bl:hover{opacity:.92}
 .btn-sm{padding:7px 14px;font-size:12px}
+.btn-ap{width:100%;padding:8px;background:var(--amd);color:var(--am);border:1px dashed rgba(229,160,0,.4);border-radius:7px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:4px}
+.btn-ap:hover{background:rgba(229,160,0,.2)}
+.btn-x{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;font-size:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btn-x:hover{color:var(--rd);background:rgba(239,68,68,.1)}
+.btn-dr{font-size:12px;padding:3px 10px;border-radius:6px;background:transparent;color:var(--t3);border:none;cursor:pointer;font-family:inherit}
+.btn-dr:hover{color:var(--rd);background:rgba(239,68,68,.1)}
 .tbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .tbar-sep{width:1px;background:var(--bd);margin:0 4px;align-self:stretch}
+
+.rnum{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:var(--am);color:#0b0e14;font-size:12px;font-weight:800;margin-right:8px}
+.rtit{font-size:13px;font-weight:700;color:var(--am);display:flex;align-items:center}
+.rhead{cursor:pointer;user-select:none}.rhead:hover{background:#1c2130}
+.collapsed .card-bd{display:none}
+.collapsed .chev{transform:rotate(-90deg)}
+.chev{transition:transform .2s;display:inline-block;color:var(--t3);font-size:15px}
+.ract{display:flex;align-items:center;gap:8px}
+.prow{display:flex;align-items:center;gap:8px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;margin-bottom:7px;flex-wrap:wrap}
+.prow .pi{font-size:11px;color:var(--t3);min-width:24px;font-weight:600}
+.prow select{flex:2;padding:6px 10px;font-size:13px;min-width:80px}
+.prow .qty-wrap{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.prow .qty-wrap label{margin:0;white-space:nowrap;font-size:10px;min-width:auto}
+.prow .qty-wrap input{width:55px;padding:6px 8px;font-size:13px;text-align:center}
+.prow .pod{font-size:11px;color:var(--t3);min-width:130px;text-align:right;font-weight:600}
+.plbl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);font-weight:700;margin:14px 0 8px}
 
 #results{display:none}
 #results.show{display:block}
@@ -64,15 +84,17 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 .mt .center{text-align:center}
 .mt .right{text-align:right}
 .mt .q{font-weight:700;color:var(--t1)}
+.mt .cat-struct td{border-left:3px solid var(--am);background:rgba(229,160,0,.04)}
+.mt .cat-fix td{border-left:3px solid var(--bl);background:rgba(59,130,246,.04)}
+.mt .cat-clamp td{border-left:3px solid var(--gn);background:rgba(16,185,129,.04)}
 
 .copy-box{margin-top:18px;padding:14px;background:var(--c3);border:1px solid var(--bd);border-radius:10px}
 .copy-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .copy-head h4{font-size:12px;color:var(--am);letter-spacing:1px;text-transform:uppercase}
 .copy-note{font-size:11px;color:var(--t3);margin-bottom:8px}
-
-.sec-title{font-size:13px;font-weight:700;color:var(--am);margin-bottom:10px}
 .box-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
 .mini-card{background:var(--c3);border:1px solid var(--bd);border-radius:8px;padding:12px}
+.sec-title{font-size:13px;font-weight:700;color:var(--am);margin-bottom:10px}
 
 @media print{
   body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -93,8 +115,8 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
     <div class="logo">
       <div class="logo-i">PF</div>
       <div>
-        <h1>uPVC Pipe & Fittings Quantity Calculator</h1>
-        <small>BSEN 1452 PN 15 Class E / BSEN 1452-3 SCH 80</small>
+        <h1>uPVC Pipe, Fittings & Support Calculator</h1>
+        <small>BSEN 1452 PN 15 CLASS E / BSEN 1452-3 SCH 80</small>
       </div>
     </div>
     <div class="badge">Water In Motion LLC</div>
@@ -131,11 +153,37 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
           </select>
         </div>
       </div>
-      <div class="note">
-        <b>Pipe Specification:</b> BSEN 1452 PN 15 Class E<br>
-        <b>Fittings Specification:</b> BSEN 1452-3 SCH 80<br>
-        <b>Pipe Length Per No.:</b> 6 Mtr
+      <div class="row3" style="margin-top:14px">
+        <div>
+          <label>Additional Pipe Qty Support Type</label>
+          <select id="extraSupportType">
+            <option value="t1" selected>Full C-Channel</option>
+            <option value="t2">Threaded Rod + C-Channel</option>
+            <option value="t3">Threaded Rod + Rubber Clamp</option>
+          </select>
+        </div>
+        <div>
+          <label>Pipe Specification</label>
+          <input type="text" value="BSEN 1452 PN 15 CLASS E" readonly>
+        </div>
+        <div>
+          <label>Fittings Specification</label>
+          <input type="text" value="BSEN 1452-3 SCH 80" readonly>
+        </div>
       </div>
+      <div class="note">
+        <b>Pipe length per no.:</b> 6 Mtr<br>
+        <b>Support spacing:</b> 1.5 Mtr<br>
+        <b>Note:</b> Manual route section calculates route-based supports. Additional calculated pipe quantities are also included in support calculation using the selected default support type above.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><span>Manual Pipe Support Routes</span></div>
+    <div class="card-bd">
+      <div id="routeBox"></div>
+      <button class="btn-ap noprint" id="btnAddRoute" type="button">+ Add Pipe Route</button>
     </div>
   </div>
 
@@ -171,8 +219,8 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
         </div>
       </div>
       <div class="small-note">
-        Each point considers: 4 Nos 90° Elbow, 2 Nos 45° Elbow, 1 No Socket/Coupler. <br>
-        Inlet and Vacuum Point also add 1 No Female Adaptor. <br>
+        Each point considers: 4 Nos 90° Elbow, 2 Nos 45° Elbow, 1 No Socket/Coupler.<br>
+        Inlet and Vacuum Point also add 1 No Female Adaptor.<br>
         All these fittings points consider 1.5 Mtr pipe each.
       </div>
     </div>
@@ -184,73 +232,50 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
       <div class="box-grid">
         <div class="mini-card">
           <div class="sec-title">Filter Pump Connection</div>
-          <label>No of Pumps</label>
-          <select id="filterPumpCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="filterPumpSize"></select>
+          <label>No of Pumps</label><select id="filterPumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="filterPumpSize"></select>
           <div class="small-note">3 Mtr pipe for each pump</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">Booster Pump Connection</div>
-          <label>No of Pumps</label>
-          <select id="boosterPumpCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="boosterPumpSize"></select>
+          <label>No of Pumps</label><select id="boosterPumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="boosterPumpSize"></select>
           <div class="small-note">3 Mtr pipe for each pump</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">Circulation Pump Connection</div>
-          <label>No of Pumps</label>
-          <select id="circulationPumpCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="circulationPumpSize"></select>
+          <label>No of Pumps</label><select id="circulationPumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="circulationPumpSize"></select>
           <div class="small-note">3 Mtr pipe for each pump</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">Feature Pump Connection</div>
-          <label>No of Pumps</label>
-          <select id="featurePumpCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="featurePumpSize"></select>
+          <label>No of Pumps</label><select id="featurePumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="featurePumpSize"></select>
           <div class="small-note">3 Mtr pipe for each pump</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">Sand Filter Connection</div>
-          <label>No of Sand Filters</label>
-          <select id="sandFilterCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="sandFilterSize"></select>
+          <label>No of Sand Filters</label><select id="sandFilterCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="sandFilterSize"></select>
           <div class="small-note">3 Mtr pipe for each sand filter</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">UV Unit Connection</div>
-          <label>No of UV Units</label>
-          <select id="uvUnitCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="uvUnitSize"></select>
+          <label>No of UV Units</label><select id="uvUnitCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="uvUnitSize"></select>
           <div class="small-note">3 Mtr pipe for each UV unit</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">Heat Cool Unit Connection</div>
-          <label>No of H/C Units</label>
-          <select id="hcUnitCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="hcUnitSize"></select>
+          <label>No of H/C Units</label><select id="hcUnitCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="hcUnitSize"></select>
           <div class="small-note">3 Mtr pipe for each unit</div>
         </div>
-
         <div class="mini-card">
           <div class="sec-title">Dosing Unit Connection</div>
-          <label>No of Dosing Units</label>
-          <select id="dosingUnitCount"></select>
-          <label style="margin-top:10px">Pipe Size</label>
-          <select id="dosingUnitSize"></select>
+          <label>No of Dosing Units</label><select id="dosingUnitCount"></select>
+          <label style="margin-top:10px">Pipe Size</label><select id="dosingUnitSize"></select>
           <div class="small-note">12 Mtr pipe for each unit</div>
         </div>
       </div>
@@ -313,7 +338,6 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
   <div class="tbar noprint">
     <button class="btn btn-am" id="btnCalc">Calculate</button>
     <button class="btn btn-gh" id="btnReset">Reset</button>
-    <div class="tbar-sep"></div>
     <button class="btn btn-bl btn-sm" onclick="window.print()">Print</button>
   </div>
 
@@ -321,25 +345,48 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 </div>
 
 <script>
+// =============================================
+// MASTER DATA
+// =============================================
 var PK = ['0.5','0.75','1','1.25','1.5','2','3','4','6','8','10','12'];
-var P_INCH = {
-  '0.5':'1/2"',
-  '0.75':'3/4"',
-  '1':'1"',
-  '1.25':'1 1/4"',
-  '1.5':'1 1/2"',
-  '2':'2"',
-  '3':'3"',
-  '4':'4"',
-  '6':'6"',
-  '8':'8"',
-  '10':'10"',
-  '12':'12"'
-};
-var PIPE_SPEC = 'BSEN 1452 PN 15 Class E';
+var P_OD = {}, P_OD_MIN = {}, P_OD_MAX = {}, P_WT_MIN = {}, P_WT_MAX = {};
+var P_DN = {}, P_INCH = {}, P_LABEL = {};
+(function () {
+  var data = {
+    '0.5' : {inch:'1/2"',    dn:'DN15',  odMin:21.2,  odMax:21.5,  wtMin:1.7,  wtMax:2.1},
+    '0.75': {inch:'3/4"',    dn:'DN20',  odMin:26.6,  odMax:26.9,  wtMin:1.9,  wtMax:2.5},
+    '1'   : {inch:'1"',      dn:'DN25',  odMin:33.4,  odMax:33.7,  wtMin:2.2,  wtMax:2.8},
+    '1.25': {inch:'1 1/4"',  dn:'DN32',  odMin:42.1,  odMax:42.4,  wtMin:2.7,  wtMax:3.3},
+    '1.5' : {inch:'1 1/2"',  dn:'DN40',  odMin:48.1,  odMax:48.4,  wtMin:3.1,  wtMax:3.7},
+    '2'   : {inch:'2"',      dn:'DN50',  odMin:60.2,  odMax:60.5,  wtMin:3.9,  wtMax:4.5},
+    '3'   : {inch:'3"',      dn:'DN80',  odMin:88.7,  odMax:89.1,  wtMin:5.7,  wtMax:6.6},
+    '4'   : {inch:'4"',      dn:'DN100', odMin:114.1, odMax:114.5, wtMin:7.3,  wtMax:8.4},
+    '6'   : {inch:'6"',      dn:'DN150', odMin:168.0, odMax:168.5, wtMin:10.8, wtMax:12.5},
+    '8'   : {inch:'8"',      dn:'DN200', odMin:218.8, odMax:219.4, wtMin:12.6, wtMax:14.5},
+    '10'  : {inch:'10"',     dn:'DN250', odMin:272.6, odMax:273.4, wtMin:15.7, wtMax:18.1},
+    '12'  : {inch:'12"',     dn:'DN300', odMin:323.4, odMax:324.3, wtMin:18.7, wtMax:21.6}
+  };
+  for (var k in data) {
+    P_INCH[k]   = data[k].inch;
+    P_DN[k]     = data[k].dn;
+    P_OD_MIN[k] = data[k].odMin;
+    P_OD_MAX[k] = data[k].odMax;
+    P_WT_MIN[k] = data[k].wtMin;
+    P_WT_MAX[k] = data[k].wtMax;
+    P_OD[k]     = data[k].odMax;
+    P_LABEL[k]  = data[k].inch + ' (' + data[k].dn + ' - OD ' + data[k].odMin + ' to ' + data[k].odMax + ' mm)';
+  }
+})();
+
+var PIPE_SPEC = 'BSEN 1452 PN 15 CLASS E';
 var FIT_SPEC = 'BSEN 1452-3 SCH 80';
 var PIPE_LEN_PER_NO = 6;
+var TN = {t1:'Full C-Channel Support', t2:'Threaded Rod & C-Channel Combo', t3:'Threaded Rod with Rubber Clamp'};
+var SP = 1.5, OL = 300, GP = 6, GE = 3, VH = 80;
 
+// =============================================
+// HELPERS
+// =============================================
 function sizeOptions(selected){
   var h='';
   for(var i=0;i<PK.length;i++){
@@ -355,33 +402,8 @@ function countOptions(selected){
   }
   return h;
 }
-function initControls(){
-  var sizeIds = [
-    'sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize',
-    'sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize',
-    'pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'
-  ];
-  for(var i=0;i<sizeIds.length;i++){
-    var el=document.getElementById(sizeIds[i]);
-    if(el) el.innerHTML=sizeOptions('2');
-  }
-
-  var countIds = [
-    'filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount',
-    'sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount'
-  ];
-  for(var j=0;j<countIds.length;j++){
-    var ce=document.getElementById(countIds[j]);
-    if(ce) ce.innerHTML=countOptions('0');
-  }
-}
-
-function n(id){
-  return parseFloat(document.getElementById(id).value)||0;
-}
-function s(id){
-  return document.getElementById(id).value;
-}
+function n(id){ return parseFloat(document.getElementById(id).value)||0; }
+function s(id){ return document.getElementById(id).value; }
 function escapeHtml(str){
   return String(str)
     .replace(/&/g,'&amp;')
@@ -402,6 +424,11 @@ function addFit(map,size,item,qty){
   if(!map[key]) map[key]={size:size,item:item,qty:0};
   map[key].qty += qty;
 }
+function addMat(map,key,qty){
+  if(qty<=0) return;
+  map[key]=(map[key]||0)+qty;
+}
+function getUOM(){ return 'Nos'; }
 function copyText(id){
   var ta=document.getElementById(id);
   if(!ta) return;
@@ -414,35 +441,296 @@ function copyText(id){
     alert('Copied successfully.');
   });
 }
+function getCat(item){
+  var il=item.toLowerCase();
+  if(il.indexOf('c-channel')>=0||il.indexOf('threaded rod')>=0) return 'struct';
+  if(il.indexOf('u-strap')>=0||il.indexOf('rubber clamp')>=0) return 'clamp';
+  return 'fix';
+}
+function getCatClass(item){
+  var c=getCat(item);
+  if(c==='struct') return 'cat-struct';
+  if(c==='clamp') return 'cat-clamp';
+  return 'cat-fix';
+}
 
-function runCalc(){
-  var pipeBrand = s('pipeBrand');
-  var fitBrand = s('fitBrand');
-  var projName = document.getElementById('projName').value || 'Untitled Project';
-  var projRef = document.getElementById('projRef').value || '-';
+// =============================================
+// ROUTE STATE
+// =============================================
+var R=[], NID=0;
 
-  var pipes = {};
-  var fits = {};
+function newR(){
+  NID++;
+  return {id:NID, nm:'', ds:'', tp:'t1', col:false, pp:[{sz:'2',qty:1}]};
+}
+function findR(id){
+  for(var i=0;i<R.length;i++) if(R[i].id===id) return R[i];
+  return null;
+}
+function syncRoutes(){
+  for(var i=0;i<R.length;i++){
+    var r=R[i],e;
+    e=document.getElementById('rn'+r.id);if(e)r.nm=e.value;
+    e=document.getElementById('rd'+r.id);if(e)r.ds=e.value;
+    e=document.getElementById('rt'+r.id);if(e)r.tp=e.value;
+    e=document.getElementById('rc'+r.id);if(e)r.col=e.classList.contains('collapsed');
+    for(var j=0;j<r.pp.length;j++){
+      e=document.getElementById('ps'+r.id+'x'+j);if(e)r.pp[j].sz=e.value;
+      e=document.getElementById('pq'+r.id+'x'+j);if(e)r.pp[j].qty=parseInt(e.value)||1;
+    }
+  }
+}
+function drawPipeRows(rid){
+  var r=findR(rid); if(!r) return;
+  var box=document.getElementById('pb'+rid); if(!box) return;
+  var h='';
+  for(var j=0;j<r.pp.length;j++){
+    var p=r.pp[j];
+    h+='<div class="prow">';
+    h+='<span class="pi">#'+(j+1)+'</span>';
+    h+='<select id="ps'+rid+'x'+j+'" onchange="chgP('+rid+','+j+',this.value)">'+sizeOptions(p.sz)+'</select>';
+    h+='<div class="qty-wrap"><label>Runs:</label><input type="number" id="pq'+rid+'x'+j+'" value="'+p.qty+'" min="1" max="50" step="1"></div>';
+    h+='<span class="pod" id="po'+rid+'x'+j+'">OD '+P_OD_MIN[p.sz]+'-'+P_OD_MAX[p.sz]+' mm</span>';
+    if(r.pp.length>1){
+      h+='<button class="btn-x" type="button" onclick="delP('+rid+','+j+')">&#10005;</button>';
+    }else{
+      h+='<button class="btn-x" type="button" disabled style="opacity:.3">&#10005;</button>';
+    }
+    h+='</div>';
+  }
+  box.innerHTML=h;
+}
+function drawRoutes(){
+  var box=document.getElementById('routeBox');
+  var h='';
+  for(var i=0;i<R.length;i++){
+    var r=R[i],n=i+1,nn=n<10?'0'+n:''+n;
+    var cc=r.col?' collapsed':'';
+    var nmE=escapeHtml(r.nm);
+    var tOpts='';
+    tOpts+='<option value="t1"'+(r.tp==='t1'?' selected':'')+'>Full C-Channel</option>';
+    tOpts+='<option value="t2"'+(r.tp==='t2'?' selected':'')+'>Threaded Rod + C-Channel</option>';
+    tOpts+='<option value="t3"'+(r.tp==='t3'?' selected':'')+'>Threaded Rod + Rubber Clamp</option>';
+    var rmBtn=R.length>1?'<button class="btn-dr noprint" type="button" onclick="event.stopPropagation();delR('+r.id+')">Remove</button>':'';
 
-  function addFittingPoint(qty,size,needFemale){
-    if(qty<=0) return;
-    addPipe(pipes,size,qty*1.5,'Fittings point length');
-    addFit(fits,size,'90° Elbow',qty*4);
-    addFit(fits,size,'45° Elbow',qty*2);
-    addFit(fits,size,'Socket / Coupler',qty*1);
-    if(needFemale) addFit(fits,size,'Female Adaptor',qty*1);
+    h+='<div class="card'+cc+'" id="rc'+r.id+'">';
+    h+='<div class="card-hd rhead" onclick="togR('+r.id+')">';
+    h+='<div class="rtit"><span class="rnum">'+n+'</span>PIPE ROUTE '+nn+'</div>';
+    h+='<div class="ract">'+rmBtn+'<span class="chev">&#9662;</span></div>';
+    h+='</div>';
+    h+='<div class="card-bd">';
+    h+='<div class="row3">';
+    h+='<div><label>Route Description</label><input type="text" id="rn'+r.id+'" value="'+nmE+'" placeholder="e.g. Plant Room to Pool"></div>';
+    h+='<div><label>Distance (m)</label><input type="number" id="rd'+r.id+'" value="'+r.ds+'" placeholder="0" min="0" step="0.1"></div>';
+    h+='<div><label>Support Type</label><select id="rt'+r.id+'">'+tOpts+'</select></div>';
+    h+='</div>';
+    h+='<div class="plbl">Pipe Sizes & Number of Runs</div>';
+    h+='<div id="pb'+r.id+'"></div>';
+    h+='<button class="btn-ap noprint" type="button" onclick="addP('+r.id+')">+ Add Pipe Size</button>';
+    h+='</div></div>';
+  }
+  box.innerHTML=h;
+  for(var k=0;k<R.length;k++) drawPipeRows(R[k].id);
+}
+function togR(id){ var el=document.getElementById('rc'+id); if(el) el.classList.toggle('collapsed'); }
+function delR(id){ syncRoutes(); R=R.filter(function(r){ return r.id!==id; }); drawRoutes(); }
+function addP(rid){
+  var r=findR(rid); if(!r) return;
+  for(var j=0;j<r.pp.length;j++){
+    var e=document.getElementById('ps'+rid+'x'+j); if(e) r.pp[j].sz=e.value;
+    e=document.getElementById('pq'+rid+'x'+j); if(e) r.pp[j].qty=parseInt(e.value)||1;
+  }
+  r.pp.push({sz:'2',qty:1});
+  drawPipeRows(rid);
+}
+function delP(rid,idx){
+  var r=findR(rid); if(!r||r.pp.length<=1) return;
+  for(var j=0;j<r.pp.length;j++){
+    var e=document.getElementById('ps'+rid+'x'+j); if(e) r.pp[j].sz=e.value;
+    e=document.getElementById('pq'+rid+'x'+j); if(e) r.pp[j].qty=parseInt(e.value)||1;
+  }
+  r.pp.splice(idx,1);
+  drawPipeRows(rid);
+}
+function chgP(rid,idx,val){
+  var r=findR(rid); if(r) r.pp[idx].sz=val;
+  var od=document.getElementById('po'+rid+'x'+idx);
+  if(od) od.textContent='OD '+P_OD_MIN[val]+'-'+P_OD_MAX[val]+' mm';
+}
+
+// =============================================
+// SUPPORT CALCULATION
+// =============================================
+function calcSupportForLine(name, dist, type, pipeEntries){
+  var pipes=[];
+  for(var j=0;j<pipeEntries.length;j++){
+    var q=pipeEntries[j].qty||1;
+    for(var k=0;k<q;k++) pipes.push(pipeEntries[j].sz);
   }
 
-  addFittingPoint(n('qtyInlets'),'2',true);
-  addFittingPoint(n('qtyVacuum'),'2',true);
-  addFittingPoint(n('qtyOverflow'),'2',false);
-  addFittingPoint(n('qtySkimmers'),'2',false);
-  addFittingPoint(n('qtyMainDrains'),s('sizeMainDrain'),false);
+  var nP=pipes.length;
+  var nS=Math.floor(dist/SP)+1;
+  var sumOD=0;
+  for(var i=0;i<pipes.length;i++) sumOD += P_OD[pipes[i]]/10;
+  var hori=sumOD + GP*(nP-1) + GE*2;
+  var sm=0, lg=0;
+  for(var a=0;a<pipes.length;a++){
+    if(P_OD[pipes[a]]<=63) sm++;
+    else lg++;
+  }
+
+  var mat={}, desc=[], cCh=0, rod=0;
+
+  function ustraps(){
+    for(var i=0;i<pipes.length;i++){
+      addMat(mat,'U-Strap Rubber Lined - '+P_INCH[pipes[i]]+' ('+P_DN[pipes[i]]+')',nS);
+    }
+    if(sm>0){
+      addMat(mat,'8mm Nut',sm*nS*2);
+      addMat(mat,'8mm Bolt',sm*nS*2);
+      addMat(mat,'8mm Washer',sm*nS*2);
+    }
+    if(lg>0){
+      addMat(mat,'10mm Nut',lg*nS*2);
+      addMat(mat,'10mm Bolt',lg*nS*2);
+      addMat(mat,'10mm Washer',lg*nS*2);
+    }
+  }
+
+  if(type==='t1'){
+    var vt=VH*2, perS=hori+vt; cCh=perS*nS;
+    addMat(mat,'C-Channel 41x41mm - 3m lengths',Math.ceil(cCh/OL));
+    addMat(mat,'4-Hole L-Clamp',nS*2);
+    addMat(mat,'10mm x 20mm GL Bolt',nS*8);
+    addMat(mat,'10mm Spring Nut',nS*4);
+    addMat(mat,'10mm Unifix',nS*4);
+    ustraps();
+    desc.push('Horizontal: '+hori.toFixed(1)+'cm + Vertical: '+vt+'cm');
+  }else if(type==='t2'){
+    cCh=hori*nS; var vR=VH*2; rod=vR*nS;
+    addMat(mat,'C-Channel 41x41mm - 3m lengths',Math.ceil(cCh/OL));
+    addMat(mat,'10mm Threaded Rod - 3m lengths',Math.ceil(rod/OL));
+    addMat(mat,'10mm Nut',nS*6);
+    addMat(mat,'10mm Washer',nS*6);
+    addMat(mat,'10mm Unifix',nS*2);
+    ustraps();
+    desc.push('Horizontal C-Channel: '+hori.toFixed(1)+'cm/support');
+  }else{
+    var vr=VH*2; rod=vr*nS;
+    addMat(mat,'10mm Threaded Rod - 3m lengths',Math.ceil(rod/OL));
+    addMat(mat,'10mm Nut',nS*2);
+    addMat(mat,'10mm Washer',nS*2);
+    addMat(mat,'10mm Unifix',nS*1);
+    for(var x=0;x<pipes.length;x++){
+      addMat(mat,'Rubber Clamp - '+P_INCH[pipes[x]]+' ('+P_DN[pipes[x]]+')',nS);
+    }
+    desc.push('Vertical Rod: '+vr+'cm/support');
+  }
+
+  return {
+    name:name,
+    dist:dist,
+    type:type,
+    pipeEntries:pipeEntries,
+    pipes:pipes,
+    supports:nS,
+    mat:mat,
+    desc:desc
+  };
+}
+
+// =============================================
+// INITIALIZE SELECTS
+// =============================================
+function initControls(){
+  var sizeIds = [
+    'sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize',
+    'sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize',
+    'pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'
+  ];
+  for(var i=0;i<sizeIds.length;i++){
+    var el=document.getElementById(sizeIds[i]);
+    if(el) el.innerHTML=sizeOptions('2');
+  }
+  var countIds = [
+    'filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount',
+    'sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount'
+  ];
+  for(var j=0;j<countIds.length;j++){
+    var ce=document.getElementById(countIds[j]);
+    if(ce) ce.innerHTML=countOptions('0');
+  }
+}
+
+// =============================================
+// MAIN CALCULATION
+// =============================================
+function runCalc(){
+  syncRoutes();
+
+  var projName = document.getElementById('projName').value || 'Untitled Project';
+  var projRef = document.getElementById('projRef').value || '-';
+  var pipeBrand = s('pipeBrand');
+  var fitBrand = s('fitBrand');
+  var extraSupportType = s('extraSupportType');
+
+  var totalPipes = {};       // combined pipe summary
+  var fittings = {};         // fittings summary
+  var supportLines = [];     // support detail lines
+  var supportGrand = {};     // grand support materials
+
+  function addSupportGrand(mat){
+    var ks=Object.keys(mat);
+    for(var i=0;i<ks.length;i++) addMat(supportGrand, ks[i], mat[ks[i]]);
+  }
+
+  // -----------------------------------------
+  // 1) MANUAL SUPPORT ROUTES
+  // -----------------------------------------
+  for(var i=0;i<R.length;i++){
+    var r=R[i];
+    var dist=parseFloat(r.ds);
+    if(isNaN(dist)||dist<=0) continue;
+
+    var name=r.nm||('Pipe Route '+(i+1));
+    for(var j=0;j<r.pp.length;j++){
+      addPipe(totalPipes, r.pp[j].sz, dist*(r.pp[j].qty||1), 'Manual route: '+name);
+    }
+
+    var res=calcSupportForLine(name, dist, r.tp, r.pp);
+    supportLines.push(res);
+    addSupportGrand(res.mat);
+  }
+
+  // -----------------------------------------
+  // 2) FITTINGS + ADDITIONAL PIPE QTY
+  // -----------------------------------------
+  var extraPipeBySize = {};
+
+  function addExtraPipe(size,length,remark){
+    addPipe(totalPipes,size,length,remark);
+    addPipe(extraPipeBySize,size,length,remark);
+  }
+
+  function addFittingPoint(qty,size,needFemale,label){
+    if(qty<=0) return;
+    addExtraPipe(size,qty*1.5,label+' pipe allowance');
+    addFit(fittings,size,'90° Elbow',qty*4);
+    addFit(fittings,size,'45° Elbow',qty*2);
+    addFit(fittings,size,'Socket / Coupler',qty*1);
+    if(needFemale) addFit(fittings,size,'Female Adaptor',qty*1);
+  }
+
+  addFittingPoint(n('qtyInlets'),'2',true,'Inlets');
+  addFittingPoint(n('qtyVacuum'),'2',true,'Vacuum Points');
+  addFittingPoint(n('qtyOverflow'),'2',false,'Overflow Drains');
+  addFittingPoint(n('qtySkimmers'),'2',false,'Skimmers');
+  addFittingPoint(n('qtyMainDrains'),s('sizeMainDrain'),false,'Main Drains');
 
   function addEquipmentPipe(countId,sizeId,lenEach,label){
-    var count = n(countId);
-    var size = s(sizeId);
-    if(count>0) addPipe(pipes,size,count*lenEach,label+' ('+count+' Nos)');
+    var count=n(countId), size=s(sizeId);
+    if(count<=0) return;
+    addExtraPipe(size,count*lenEach,label+' ('+count+' Nos)');
   }
 
   addEquipmentPipe('filterPumpCount','filterPumpSize',3,'Filter Pump Connection');
@@ -454,181 +742,227 @@ function runCalc(){
   addEquipmentPipe('hcUnitCount','hcUnitSize',3,'Heat Cool Unit Connection');
   addEquipmentPipe('dosingUnitCount','dosingUnitSize',12,'Dosing Unit Connection');
 
-  addPipe(pipes,s('pumpSuctionSize'),n('pumpSuctionDist'),'Pump Suction Connection');
-  addPipe(pipes,s('plantMainInletSize'),n('plantMainInletDist'),'Plant Room Main Inlet Line');
-  addPipe(pipes,s('heatCoolLineSize'),n('heatCoolLineDist'),'Heat Cool Unit Line');
-  addPipe(pipes,s('freshWaterSize'),18,'Fresh Water Supply Line');
+  addExtraPipe(s('pumpSuctionSize'),n('pumpSuctionDist'),'Pump Suction Connection');
+  addExtraPipe(s('plantMainInletSize'),n('plantMainInletDist'),'Plant Room Main Inlet Line');
+  addExtraPipe(s('heatCoolLineSize'),n('heatCoolLineDist'),'Heat Cool Unit Line');
+  addExtraPipe(s('freshWaterSize'),18,'Fresh Water Supply Line');
+
+  // -----------------------------------------
+  // 3) SUPPORT FOR ADDITIONAL PIPE QUANTITIES
+  // -----------------------------------------
+  var extraSizes=Object.keys(extraPipeBySize);
+  extraSizes.sort(function(a,b){ return parseFloat(a)-parseFloat(b); });
+  for(var e=0;e<extraSizes.length;e++){
+    var sz=extraSizes[e];
+    var len=extraPipeBySize[sz].length;
+    if(len<=0) continue;
+
+    var lineName='Additional Pipe Qty - '+P_INCH[sz];
+    var resExtra=calcSupportForLine(lineName, len, extraSupportType, [{sz:sz,qty:1}]);
+    supportLines.push(resExtra);
+    addSupportGrand(resExtra.mat);
+  }
 
   renderResults({
     projName:projName,
     projRef:projRef,
     pipeBrand:pipeBrand,
     fitBrand:fitBrand,
-    pipes:pipes,
-    fits:fits
+    totalPipes:totalPipes,
+    fittings:fittings,
+    supportLines:supportLines,
+    supportGrand:supportGrand
   });
 }
 
+// =============================================
+// RENDER RESULTS
+// =============================================
 function renderResults(data){
-  var pipeKeys = Object.keys(data.pipes);
-  var fitKeys = Object.keys(data.fits);
-
+  var pipeKeys=Object.keys(data.totalPipes);
   pipeKeys.sort(function(a,b){ return parseFloat(a)-parseFloat(b); });
+
+  var fitKeys=Object.keys(data.fittings);
   fitKeys.sort(function(a,b){
-    var as=parseFloat(data.fits[a].size), bs=parseFloat(data.fits[b].size);
+    var as=parseFloat(data.fittings[a].size), bs=parseFloat(data.fittings[b].size);
     if(as!==bs) return as-bs;
-    return data.fits[a].item.localeCompare(data.fits[b].item);
+    return data.fittings[a].item.localeCompare(data.fittings[b].item);
   });
 
-  var totalLength = 0, totalPipeNos = 0;
-  var pipeRows = '';
-  var pipeCopy = ['Sl No\tPipe Size\tTotal Length (Mtr)\t6 Mtr Pipe Nos\tBrand\tSpecification'];
+  var totalLen=0, totalPipeNos=0;
+  var pipeRows='';
+  var pipeCopy=['Sl No\tPipe Size\tTotal Length (Mtr)\t6 Mtr Pipe Nos\tBrand\tSpecification'];
 
   for(var i=0;i<pipeKeys.length;i++){
-    var size = pipeKeys[i];
-    var len = data.pipes[size].length;
-    var nos = Math.ceil(len / PIPE_LEN_PER_NO);
-    totalLength += len;
-    totalPipeNos += nos;
+    var size=pipeKeys[i];
+    var len=data.totalPipes[size].length;
+    var nos=Math.ceil(len/PIPE_LEN_PER_NO);
+    totalLen+=len;
+    totalPipeNos+=nos;
 
-    pipeRows += '<tr>';
-    pipeRows += '<td class="center">'+(i+1)+'</td>';
-    pipeRows += '<td>'+P_INCH[size]+'</td>';
-    pipeRows += '<td class="right q">'+len.toFixed(2)+'</td>';
-    pipeRows += '<td class="center">'+nos+'</td>';
-    pipeRows += '<td>'+escapeHtml(data.pipeBrand)+'</td>';
-    pipeRows += '<td>'+PIPE_SPEC+'</td>';
-    pipeRows += '</tr>';
+    pipeRows+='<tr>';
+    pipeRows+='<td class="center">'+(i+1)+'</td>';
+    pipeRows+='<td>'+P_INCH[size]+'</td>';
+    pipeRows+='<td class="right q">'+len.toFixed(2)+'</td>';
+    pipeRows+='<td class="center">'+nos+'</td>';
+    pipeRows+='<td>'+escapeHtml(data.pipeBrand)+'</td>';
+    pipeRows+='<td>'+PIPE_SPEC+'</td>';
+    pipeRows+='</tr>';
 
-    pipeCopy.push([
-      i+1,
-      P_INCH[size],
-      len.toFixed(2),
-      nos,
-      data.pipeBrand,
-      PIPE_SPEC
-    ].join('\t'));
+    pipeCopy.push([i+1,P_INCH[size],len.toFixed(2),nos,data.pipeBrand,PIPE_SPEC].join('\t'));
   }
 
-  var fitRows = '';
-  var fitCopy = ['Sl No\tPipe Size\tItem Description\tQty\tUOM\tBrand\tSpecification'];
-
-  var totalFitQty = 0;
+  var fitRows='', fitCopy=['Sl No\tPipe Size\tItem Description\tQty\tUOM\tBrand\tSpecification'], totalFitQty=0;
   for(var j=0;j<fitKeys.length;j++){
-    var f = data.fits[fitKeys[j]];
-    totalFitQty += f.qty;
+    var f=data.fittings[fitKeys[j]];
+    totalFitQty+=f.qty;
 
-    fitRows += '<tr>';
-    fitRows += '<td class="center">'+(j+1)+'</td>';
-    fitRows += '<td>'+P_INCH[f.size]+'</td>';
-    fitRows += '<td>'+escapeHtml(f.item)+'</td>';
-    fitRows += '<td class="right q">'+f.qty+'</td>';
-    fitRows += '<td class="center">Nos</td>';
-    fitRows += '<td>'+escapeHtml(data.fitBrand)+'</td>';
-    fitRows += '<td>'+FIT_SPEC+'</td>';
-    fitRows += '</tr>';
+    fitRows+='<tr>';
+    fitRows+='<td class="center">'+(j+1)+'</td>';
+    fitRows+='<td>'+P_INCH[f.size]+'</td>';
+    fitRows+='<td>'+escapeHtml(f.item)+'</td>';
+    fitRows+='<td class="right q">'+f.qty+'</td>';
+    fitRows+='<td class="center">Nos</td>';
+    fitRows+='<td>'+escapeHtml(data.fitBrand)+'</td>';
+    fitRows+='<td>'+FIT_SPEC+'</td>';
+    fitRows+='</tr>';
 
-    fitCopy.push([
-      j+1,
-      P_INCH[f.size],
-      f.item,
-      f.qty,
-      'Nos',
-      data.fitBrand,
-      FIT_SPEC
-    ].join('\t'));
+    fitCopy.push([j+1,P_INCH[f.size],f.item,f.qty,'Nos',data.fitBrand,FIT_SPEC].join('\t'));
   }
 
-  var html = '';
-  html += '<div class="card">';
-  html += '<div class="card-bd">';
-  html += '<div class="stag">Calculation Results</div>';
+  var supportDetailHtml='';
+  for(var sidx=0;sidx<data.supportLines.length;sidx++){
+    var sl=data.supportLines[sidx];
+    var rows='';
+    var mk=Object.keys(sl.mat);
+    for(var m=0;m<mk.length;m++){
+      rows+='<tr class="'+getCatClass(mk[m])+'">';
+      rows+='<td class="center">'+(m+1)+'</td>';
+      rows+='<td>'+escapeHtml(mk[m])+'</td>';
+      rows+='<td class="right q">'+sl.mat[mk[m]]+'</td>';
+      rows+='<td class="center">Nos</td>';
+      rows+='</tr>';
+    }
 
-  html += '<div class="sts">';
-  html += '<div class="st"><div class="sl">Project</div><div class="sv" style="font-size:16px">'+escapeHtml(data.projName)+'</div></div>';
-  html += '<div class="st"><div class="sl">Project Ref</div><div class="sv" style="font-size:16px">'+escapeHtml(data.projRef)+'</div></div>';
-  html += '<div class="st"><div class="sl">Total Pipe Length</div><div class="sv">'+totalLength.toFixed(2)+'<span class="su">Mtr</span></div></div>';
-  html += '<div class="st"><div class="sl">Total 6 Mtr Pipes</div><div class="sv">'+totalPipeNos+'</div></div>';
-  html += '<div class="st"><div class="sl">Total Fittings Qty</div><div class="sv">'+totalFitQty+'</div></div>';
-  html += '</div>';
+    supportDetailHtml+='<div class="card">';
+    supportDetailHtml+='<div class="card-hd"><span>'+escapeHtml(sl.name)+'</span><span>'+TN[sl.type]+'</span></div>';
+    supportDetailHtml+='<div class="card-bd">';
+    supportDetailHtml+='<div class="sts">';
+    supportDetailHtml+='<div class="st"><div class="sl">Distance</div><div class="sv">'+sl.dist.toFixed(2)+'<span class="su">m</span></div></div>';
+    supportDetailHtml+='<div class="st"><div class="sl">Supports</div><div class="sv">'+sl.supports+'</div></div>';
+    supportDetailHtml+='<div class="st"><div class="sl">Support Type</div><div class="sv" style="font-size:14px">'+escapeHtml(TN[sl.type])+'</div></div>';
+    supportDetailHtml+='</div>';
+    supportDetailHtml+='<table class="mt"><thead><tr><th style="width:70px">Sl No</th><th>Item Description</th><th style="width:100px">Qty</th><th style="width:80px">UOM</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    supportDetailHtml+='</div></div>';
+  }
 
-  html += '<div class="note">';
-  html += '<b>Pipe Brand:</b> '+escapeHtml(data.pipeBrand)+'<br>';
-  html += '<b>Pipe Specification:</b> '+PIPE_SPEC+'<br>';
-  html += '<b>Fittings Brand:</b> '+escapeHtml(data.fitBrand)+'<br>';
-  html += '<b>Fittings Specification:</b> '+FIT_SPEC;
-  html += '</div>';
+  var sgKeys=Object.keys(data.supportGrand);
+  var sgRows='', sgCopy=['Sl No\tItem Description\tQty\tUOM'];
+  for(var g=0;g<sgKeys.length;g++){
+    sgRows+='<tr class="'+getCatClass(sgKeys[g])+'">';
+    sgRows+='<td class="center">'+(g+1)+'</td>';
+    sgRows+='<td>'+escapeHtml(sgKeys[g])+'</td>';
+    sgRows+='<td class="right q">'+data.supportGrand[sgKeys[g]]+'</td>';
+    sgRows+='<td class="center">Nos</td>';
+    sgRows+='</tr>';
+    sgCopy.push([g+1,sgKeys[g],data.supportGrand[sgKeys[g]],'Nos'].join('\t'));
+  }
 
-  html += '<div style="margin-top:20px;font-size:13px;font-weight:700;color:var(--am)">Final Pipe Summary</div>';
-  html += '<table class="mt"><thead><tr>';
-  html += '<th style="width:70px">Sl No</th>';
-  html += '<th>Pipe Size</th>';
-  html += '<th style="width:160px">Total Length (Mtr)</th>';
-  html += '<th style="width:140px">6 Mtr Pipe Nos</th>';
-  html += '<th>Brand</th>';
-  html += '<th>Specification</th>';
-  html += '</tr></thead><tbody>'+(pipeRows || '<tr><td colspan="6" class="center">No pipe quantity found</td></tr>')+'</tbody></table>';
+  var html='';
+  html+='<div class="card"><div class="card-bd">';
+  html+='<div class="stag">Calculation Results</div>';
 
-  html += '<div class="copy-box noprint">';
-  html += '<div class="copy-head"><h4>Direct Copy Table - Pipe Summary</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copyPipe\')">Copy</button></div>';
-  html += '<div class="copy-note">Copy and paste directly into Excel.</div>';
-  html += '<textarea id="copyPipe" readonly>'+escapeHtml(pipeCopy.join('\n'))+'</textarea>';
-  html += '</div>';
+  html+='<div class="sts">';
+  html+='<div class="st"><div class="sl">Project</div><div class="sv" style="font-size:16px">'+escapeHtml(data.projName)+'</div></div>';
+  html+='<div class="st"><div class="sl">Project Ref</div><div class="sv" style="font-size:16px">'+escapeHtml(data.projRef)+'</div></div>';
+  html+='<div class="st"><div class="sl">Total Pipe Length</div><div class="sv">'+totalLen.toFixed(2)+'<span class="su">Mtr</span></div></div>';
+  html+='<div class="st"><div class="sl">Total 6 Mtr Pipes</div><div class="sv">'+totalPipeNos+'</div></div>';
+  html+='<div class="st"><div class="sl">Total Fittings Qty</div><div class="sv">'+totalFitQty+'</div></div>';
+  html+='<div class="st"><div class="sl">Support Lines</div><div class="sv">'+data.supportLines.length+'</div></div>';
+  html+='</div>';
 
-  html += '<div style="margin-top:24px;font-size:13px;font-weight:700;color:var(--am)">Fittings Summary</div>';
-  html += '<table class="mt"><thead><tr>';
-  html += '<th style="width:70px">Sl No</th>';
-  html += '<th>Pipe Size</th>';
-  html += '<th>Item Description</th>';
-  html += '<th style="width:100px">Qty</th>';
-  html += '<th style="width:80px">UOM</th>';
-  html += '<th>Brand</th>';
-  html += '<th>Specification</th>';
-  html += '</tr></thead><tbody>'+(fitRows || '<tr><td colspan="7" class="center">No fittings quantity found</td></tr>')+'</tbody></table>';
+  html+='<div class="note">';
+  html+='<b>Pipe Brand:</b> '+escapeHtml(data.pipeBrand)+'<br>';
+  html+='<b>Pipe Specification:</b> '+PIPE_SPEC+'<br>';
+  html+='<b>Fittings Brand:</b> '+escapeHtml(data.fitBrand)+'<br>';
+  html+='<b>Fittings Specification:</b> '+FIT_SPEC;
+  html+='</div>';
 
-  html += '<div class="copy-box noprint">';
-  html += '<div class="copy-head"><h4>Direct Copy Table - Fittings Summary</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copyFit\')">Copy</button></div>';
-  html += '<div class="copy-note">Copy and paste directly into Excel.</div>';
-  html += '<textarea id="copyFit" readonly>'+escapeHtml(fitCopy.join('\n'))+'</textarea>';
-  html += '</div>';
+  html+='<div style="margin-top:20px;font-size:13px;font-weight:700;color:var(--am)">Final Pipe Summary</div>';
+  html+='<table class="mt"><thead><tr><th style="width:70px">Sl No</th><th>Pipe Size</th><th style="width:160px">Total Length (Mtr)</th><th style="width:140px">6 Mtr Pipe Nos</th><th>Brand</th><th>Specification</th></tr></thead><tbody>'+(pipeRows||'<tr><td colspan="6" class="center">No pipe quantity found</td></tr>')+'</tbody></table>';
 
-  html += '</div></div>';
+  html+='<div class="copy-box noprint">';
+  html+='<div class="copy-head"><h4>Direct Copy Table - Pipe Summary</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copyPipe\')">Copy</button></div>';
+  html+='<div class="copy-note">Copy and paste directly into Excel.</div>';
+  html+='<textarea id="copyPipe" readonly>'+escapeHtml(pipeCopy.join('\n'))+'</textarea>';
+  html+='</div>';
 
-  var el = document.getElementById('results');
-  el.innerHTML = html;
+  html+='<div style="margin-top:24px;font-size:13px;font-weight:700;color:var(--am)">Final Fittings Summary</div>';
+  html+='<table class="mt"><thead><tr><th style="width:70px">Sl No</th><th>Pipe Size</th><th>Item Description</th><th style="width:100px">Qty</th><th style="width:80px">UOM</th><th>Brand</th><th>Specification</th></tr></thead><tbody>'+(fitRows||'<tr><td colspan="7" class="center">No fittings quantity found</td></tr>')+'</tbody></table>';
+
+  html+='<div class="copy-box noprint">';
+  html+='<div class="copy-head"><h4>Direct Copy Table - Fittings Summary</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copyFit\')">Copy</button></div>';
+  html+='<div class="copy-note">Copy and paste directly into Excel.</div>';
+  html+='<textarea id="copyFit" readonly>'+escapeHtml(fitCopy.join('\n'))+'</textarea>';
+  html+='</div>';
+
+  html+='<div style="margin-top:24px;font-size:13px;font-weight:700;color:var(--am)">Pipe Support Details</div>';
+  html+=(supportDetailHtml||'<div class="note">No support calculation found.</div>');
+
+  html+='<div style="margin-top:24px;font-size:13px;font-weight:700;color:var(--am)">Grand Total Support Materials</div>';
+  html+='<table class="mt"><thead><tr><th style="width:70px">Sl No</th><th>Item Description</th><th style="width:100px">Qty</th><th style="width:80px">UOM</th></tr></thead><tbody>'+(sgRows||'<tr><td colspan="4" class="center">No support materials found</td></tr>')+'</tbody></table>';
+
+  html+='<div class="copy-box noprint">';
+  html+='<div class="copy-head"><h4>Direct Copy Table - Support Grand Total</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copySupport\')">Copy</button></div>';
+  html+='<div class="copy-note">Copy and paste directly into Excel.</div>';
+  html+='<textarea id="copySupport" readonly>'+escapeHtml(sgCopy.join('\n'))+'</textarea>';
+  html+='</div>';
+
+  html+='</div></div>';
+
+  var el=document.getElementById('results');
+  el.innerHTML=html;
   el.classList.add('show');
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-document.getElementById('btnCalc').onclick = runCalc;
-
-document.getElementById('btnReset').onclick = function(){
+// =============================================
+// BUTTONS
+// =============================================
+document.getElementById('btnAddRoute').onclick=function(){
+  syncRoutes();
+  R.push(newR());
+  drawRoutes();
+};
+document.getElementById('btnCalc').onclick=runCalc;
+document.getElementById('btnReset').onclick=function(){
   document.getElementById('projName').value='';
   document.getElementById('projRef').value='';
   document.getElementById('pipeBrand').value='Cosmoplast, UAE';
   document.getElementById('fitBrand').value='Cosmoplast, UAE';
+  document.getElementById('extraSupportType').value='t1';
 
-  var inputs = document.querySelectorAll('input[type="number"]');
-  for(var i=0;i<inputs.length;i++) inputs[i].value='0';
+  var numInputs=document.querySelectorAll('input[type="number"]');
+  for(var i=0;i<numInputs.length;i++) numInputs[i].value='0';
 
-  var countIds = [
-    'filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount',
-    'sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount'
-  ];
+  var countIds=['filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount','sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount'];
   for(var j=0;j<countIds.length;j++) document.getElementById(countIds[j]).value='0';
 
-  var sizeIds = [
-    'sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize',
-    'sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize',
-    'pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'
-  ];
+  var sizeIds=['sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize','sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize','pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'];
   for(var k=0;k<sizeIds.length;k++) document.getElementById(sizeIds[k]).value='2';
+
+  R=[]; NID=0; R.push(newR()); drawRoutes();
 
   document.getElementById('results').innerHTML='';
   document.getElementById('results').classList.remove('show');
 };
 
+// =============================================
+// INIT
+// =============================================
 initControls();
+R.push(newR());
+drawRoutes();
 </script>
 </body>
 </html>
