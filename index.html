@@ -3,437 +3,385 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>uPVC Pipe Support Calculator</title>
+<title>uPVC Pipe & Fittings Quantity Calculator</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0b0e14;--c1:#12161f;--c2:#181d28;--c3:#1e2330;--bd:#262d3d;--am:#e5a000;--amb:#fbbf24;--amd:rgba(229,160,0,.12);--bl:#3b82f6;--bld:rgba(59,130,246,.12);--gn:#10b981;--gnd:rgba(16,185,129,.12);--rd:#ef4444;--t1:#e2e5ec;--t2:#99a1b3;--t3:#636d83}
+:root{
+  --bg:#0b0e14;--c1:#12161f;--c2:#181d28;--c3:#1e2330;--bd:#262d3d;
+  --am:#e5a000;--amb:#fbbf24;--amd:rgba(229,160,0,.12);
+  --bl:#3b82f6;--gn:#10b981;--rd:#ef4444;
+  --t1:#e2e5ec;--t2:#99a1b3;--t3:#636d83
+}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.5}
 .hdr{position:sticky;top:0;z-index:99;background:var(--c1);border-bottom:2px solid var(--am);padding:14px 20px}
-.hdr-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hdr-in{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-i{width:40px;height:40px;border-radius:10px;background:var(--am);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#0b0e14}
-.logo h1{font-size:17px;font-weight:700}.logo small{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:2px;display:block}
+.logo-i{width:42px;height:42px;border-radius:10px;background:var(--am);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#0b0e14}
+.logo h1{font-size:18px;font-weight:700}
+.logo small{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:2px;display:block}
 .badge{font-size:10px;color:var(--t3);border:1px solid var(--bd);padding:4px 14px;border-radius:20px;letter-spacing:1px;text-transform:uppercase}
-.wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px}
+
+.wrap{max-width:1300px;margin:0 auto;padding:24px 20px 80px}
 .card{background:var(--c1);border:1px solid var(--bd);border-radius:10px;margin-bottom:18px;overflow:hidden}
 .card-hd{padding:13px 18px;background:var(--c2);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .card-bd{padding:18px}
 .stag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--am);margin-bottom:14px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.row3{display:grid;grid-template-columns:1fr 120px 1fr;gap:12px}
-@media(max-width:640px){.row2,.row3{grid-template-columns:1fr}}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.row4{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.row2,.row3,.row4{grid-template-columns:1fr}}
+
 label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:4px}
-input,select,textarea{width:100%;padding:9px 12px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;color:var(--t1);font-family:inherit;font-size:14px}
+input,select,textarea{width:100%;padding:10px 12px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;color:var(--t1);font-family:inherit;font-size:14px}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--am);box-shadow:0 0 0 3px var(--amd)}
 select{cursor:pointer}
 textarea{min-height:180px;resize:vertical}
-.rnum{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:var(--am);color:#0b0e14;font-size:12px;font-weight:800;margin-right:8px}
-.rtit{font-size:13px;font-weight:700;color:var(--am);display:flex;align-items:center}
-.rhead{cursor:pointer;user-select:none}.rhead:hover{background:#1c2130}
-.collapsed .card-bd{display:none}
-.collapsed .chev{transform:rotate(-90deg)}
-.chev{transition:transform .2s;display:inline-block;color:var(--t3);font-size:15px}
-.ract{display:flex;align-items:center;gap:8px}
 
-.prow{display:flex;align-items:center;gap:8px;background:var(--c3);border:1px solid var(--bd);border-radius:7px;padding:7px 10px;margin-bottom:7px;flex-wrap:wrap}
-.prow .pi{font-size:11px;color:var(--t3);min-width:24px;font-weight:600}
-.prow select{flex:2;padding:6px 10px;font-size:13px;min-width:80px}
-.prow .qty-wrap{display:flex;align-items:center;gap:4px;flex:0 0 auto}
-.prow .qty-wrap label{margin:0;white-space:nowrap;font-size:10px;min-width:auto}
-.prow .qty-wrap input{width:55px;padding:6px 8px;font-size:13px;text-align:center}
-.prow .pod{font-size:11px;color:var(--t3);min-width:130px;text-align:right;font-weight:600}
-.plbl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);font-weight:700;margin:14px 0 8px}
+.note{font-size:12px;color:var(--t2);background:var(--c3);border-left:3px solid var(--am);padding:10px 12px;border-radius:0 6px 6px 0;margin-top:10px}
+.small-note{font-size:11px;color:var(--t3);margin-top:8px}
 
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:8px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
 .btn-am{background:var(--am);color:#0b0e14}.btn-am:hover{background:var(--amb)}
 .btn-gh{background:var(--c1);color:var(--t1);border:1px solid var(--bd)}.btn-gh:hover{background:var(--c2)}
-.btn-da{background:transparent;color:var(--am);border:2px dashed var(--am);opacity:.7}.btn-da:hover{opacity:1;background:var(--amd)}
-.btn-bl{background:var(--bl);color:#fff}.btn-bl:hover{background:#2563eb}
-.btn-gn{background:var(--gn);color:#fff}.btn-gn:hover{background:#059669}
+.btn-bl{background:var(--bl);color:#fff}.btn-bl:hover{opacity:.92}
 .btn-sm{padding:7px 14px;font-size:12px}
-.btn-ap{width:100%;padding:8px;background:var(--amd);color:var(--am);border:1px dashed rgba(229,160,0,.4);border-radius:7px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:4px}
-.btn-ap:hover{background:rgba(229,160,0,.2)}
-.btn-x{width:26px;height:26px;border-radius:6px;border:none;background:transparent;color:var(--t3);cursor:pointer;font-size:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.btn-x:hover{color:var(--rd);background:rgba(239,68,68,.1)}
-.btn-dr{font-size:12px;padding:3px 10px;border-radius:6px;background:transparent;color:var(--t3);border:none;cursor:pointer;font-family:inherit}
-.btn-dr:hover{color:var(--rd);background:rgba(239,68,68,.1)}
 .tbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .tbar-sep{width:1px;background:var(--bd);margin:0 4px;align-self:stretch}
 
 #results{display:none}
 #results.show{display:block}
-.bdg{font-size:10px;font-weight:700;padding:3px 11px;border-radius:16px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
-.b1{background:var(--amd);color:var(--am)}.b2{background:var(--bld);color:var(--bl)}.b3{background:var(--gnd);color:var(--gn)}
-.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px}
 .st{background:var(--c3);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
 .st .sl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:2px;font-weight:600}
-.st .sv{font-size:22px;font-weight:800;color:var(--am)}.st .su{font-size:11px;color:var(--t2);margin-left:2px}
-.cnote{font-size:11px;color:var(--t3);background:var(--c3);border-left:3px solid var(--am);padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:14px;line-height:1.7}
-.cnote b{color:var(--t2)}
-.ibar{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--t2);margin-bottom:10px}
-.ibar .v{font-weight:700;color:var(--t1)}
-.chips{display:flex;flex-wrap:wrap;gap:4px}
-.chip{font-size:11px;background:var(--amd);border:1px solid rgba(229,160,0,.25);color:var(--am);padding:1px 9px;border-radius:16px;font-weight:600}
+.st .sv{font-size:22px;font-weight:800;color:var(--am)}
+.st .su{font-size:11px;color:var(--t2);margin-left:2px}
+
 table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 .mt th{background:var(--c2);padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--t3);border-bottom:1px solid var(--bd)}
 .mt td{padding:9px 12px;border-bottom:1px solid var(--bd);color:var(--t2)}
 .mt tr:last-child td{border-bottom:none}
-.mt .q{font-weight:700;color:var(--t1)}
 .mt .center{text-align:center}
 .mt .right{text-align:right}
-.mt .cat-struct td{border-left:3px solid var(--am);background:rgba(229,160,0,.04)}
-.mt .cat-fix td{border-left:3px solid var(--bl);background:rgba(59,130,246,.04)}
-.mt .cat-clamp td{border-left:3px solid var(--gn);background:rgba(16,185,129,.04)}
-.mt .cat-hw td{border-left:3px solid #a855f7;background:rgba(168,85,247,.04)}
-
-.grd{background:linear-gradient(135deg,var(--c1),var(--c2));border:2px solid var(--am);border-radius:12px;padding:22px;margin-top:24px;box-shadow:0 0 40px rgba(229,160,0,.06)}
-.grd h2{font-size:15px;font-weight:800;color:var(--am);margin-bottom:4px}
-.grd .sub{font-size:13px;color:var(--t3);margin-bottom:16px}
-
-.legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0;font-size:11px;color:var(--t2)}
-.legend-item{display:flex;align-items:center;gap:5px}
-.legend-dot{width:10px;height:10px;border-radius:3px}
+.mt .q{font-weight:700;color:var(--t1)}
 
 .copy-box{margin-top:18px;padding:14px;background:var(--c3);border:1px solid var(--bd);border-radius:10px}
 .copy-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .copy-head h4{font-size:12px;color:var(--am);letter-spacing:1px;text-transform:uppercase}
 .copy-note{font-size:11px;color:var(--t3);margin-bottom:8px}
 
-#fileImport{display:none}
+.sec-title{font-size:13px;font-weight:700;color:var(--am);margin-bottom:10px}
+.box-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.mini-card{background:var(--c3);border:1px solid var(--bd);border-radius:8px;padding:12px}
 
 @media print{
   body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .hdr{position:relative;background:#fff;border-color:#333}
-  .card,.grd{background:#fff;border-color:#bbb;break-inside:avoid}
+  .card{background:#fff;border-color:#bbb;break-inside:avoid}
   .card-hd{background:#f3f3f3!important}
   .st{background:#f5f5f5;border-color:#ccc}
   .st .sv{color:#b45309}
-  .cnote{background:#fffbeb;border-color:#b45309}
-  .mt th{background:#eee}
-  .grd{border-color:#b45309;background:#fffbeb}
   .noprint{display:none!important}
   #results.show{display:block}
 }
 </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
 <header class="hdr">
   <div class="hdr-in">
     <div class="logo">
-      <div class="logo-i">PS</div>
-      <div><h1>uPVC Pipe Support Calculator</h1><small>BSEN 1452 &bull; PN 15 Class E</small></div>
+      <div class="logo-i">PF</div>
+      <div>
+        <h1>uPVC Pipe & Fittings Quantity Calculator</h1>
+        <small>BSEN 1452 PN 15 Class E / BSEN 1452-3 SCH 80</small>
+      </div>
     </div>
     <div class="badge">Water In Motion LLC</div>
   </div>
 </header>
 
 <div class="wrap">
+
   <div class="card">
     <div class="card-bd">
       <div class="stag">Project Details</div>
-      <div class="row2">
-        <div><label>Project Name</label><input type="text" id="projName" placeholder="Enter project name"></div>
-        <div><label>Project Ref</label><input type="text" id="projRef" placeholder="Enter project reference"></div>
+      <div class="row4">
+        <div>
+          <label>Project Name</label>
+          <input type="text" id="projName" placeholder="Enter project name">
+        </div>
+        <div>
+          <label>Project Ref</label>
+          <input type="text" id="projRef" placeholder="Enter project reference">
+        </div>
+        <div>
+          <label>uPVC Pipe Brand</label>
+          <select id="pipeBrand">
+            <option value="Cosmoplast, UAE" selected>Cosmoplast, UAE</option>
+            <option value="Hepworth">Hepworth</option>
+          </select>
+        </div>
+        <div>
+          <label>uPVC Fittings Brand</label>
+          <select id="fitBrand">
+            <option value="Cosmoplast, UAE" selected>Cosmoplast, UAE</option>
+            <option value="Atlas">Atlas</option>
+            <option value="GF">GF</option>
+          </select>
+        </div>
+      </div>
+      <div class="note">
+        <b>Pipe Specification:</b> BSEN 1452 PN 15 Class E<br>
+        <b>Fittings Specification:</b> BSEN 1452-3 SCH 80<br>
+        <b>Pipe Length Per No.:</b> 6 Mtr
       </div>
     </div>
   </div>
 
-  <div id="routeBox"></div>
+  <div class="card">
+    <div class="card-hd"><span>Pool Fittings Quantity Inputs</span></div>
+    <div class="card-bd">
+      <div class="row3">
+        <div>
+          <label>No of Inlets (2")</label>
+          <input type="number" id="qtyInlets" min="0" value="0">
+        </div>
+        <div>
+          <label>No of Vacuum Points (2")</label>
+          <input type="number" id="qtyVacuum" min="0" value="0">
+        </div>
+        <div>
+          <label>No of Overflow Drains (2")</label>
+          <input type="number" id="qtyOverflow" min="0" value="0">
+        </div>
+      </div>
+      <div class="row3" style="margin-top:14px">
+        <div>
+          <label>No of Skimmers (2")</label>
+          <input type="number" id="qtySkimmers" min="0" value="0">
+        </div>
+        <div>
+          <label>No of Main Drains</label>
+          <input type="number" id="qtyMainDrains" min="0" value="0">
+        </div>
+        <div>
+          <label>Main Drain Pipe Size</label>
+          <select id="sizeMainDrain"></select>
+        </div>
+      </div>
+      <div class="small-note">
+        Each point considers: 4 Nos 90° Elbow, 2 Nos 45° Elbow, 1 No Socket/Coupler. <br>
+        Inlet and Vacuum Point also add 1 No Female Adaptor. <br>
+        All these fittings points consider 1.5 Mtr pipe each.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><span>Equipment Connections</span></div>
+    <div class="card-bd">
+      <div class="box-grid">
+        <div class="mini-card">
+          <div class="sec-title">Filter Pump Connection</div>
+          <label>No of Pumps</label>
+          <select id="filterPumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="filterPumpSize"></select>
+          <div class="small-note">3 Mtr pipe for each pump</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">Booster Pump Connection</div>
+          <label>No of Pumps</label>
+          <select id="boosterPumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="boosterPumpSize"></select>
+          <div class="small-note">3 Mtr pipe for each pump</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">Circulation Pump Connection</div>
+          <label>No of Pumps</label>
+          <select id="circulationPumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="circulationPumpSize"></select>
+          <div class="small-note">3 Mtr pipe for each pump</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">Feature Pump Connection</div>
+          <label>No of Pumps</label>
+          <select id="featurePumpCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="featurePumpSize"></select>
+          <div class="small-note">3 Mtr pipe for each pump</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">Sand Filter Connection</div>
+          <label>No of Sand Filters</label>
+          <select id="sandFilterCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="sandFilterSize"></select>
+          <div class="small-note">3 Mtr pipe for each sand filter</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">UV Unit Connection</div>
+          <label>No of UV Units</label>
+          <select id="uvUnitCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="uvUnitSize"></select>
+          <div class="small-note">3 Mtr pipe for each UV unit</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">Heat Cool Unit Connection</div>
+          <label>No of H/C Units</label>
+          <select id="hcUnitCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="hcUnitSize"></select>
+          <div class="small-note">3 Mtr pipe for each unit</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="sec-title">Dosing Unit Connection</div>
+          <label>No of Dosing Units</label>
+          <select id="dosingUnitCount"></select>
+          <label style="margin-top:10px">Pipe Size</label>
+          <select id="dosingUnitSize"></select>
+          <div class="small-note">12 Mtr pipe for each unit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><span>Distance Based Lines</span></div>
+    <div class="card-bd">
+      <div class="row3">
+        <div>
+          <label>Pump Suction Connection - Pipe Size</label>
+          <select id="pumpSuctionSize"></select>
+        </div>
+        <div>
+          <label>Pump Suction Connection - Distance (Mtr)</label>
+          <input type="number" id="pumpSuctionDist" min="0" step="0.1" value="0">
+        </div>
+        <div></div>
+      </div>
+
+      <div class="row3" style="margin-top:14px">
+        <div>
+          <label>Plant Room Main Inlet Line - Pipe Size</label>
+          <select id="plantMainInletSize"></select>
+        </div>
+        <div>
+          <label>Plant Room Main Inlet Line - Distance (Mtr)</label>
+          <input type="number" id="plantMainInletDist" min="0" step="0.1" value="0">
+        </div>
+        <div></div>
+      </div>
+
+      <div class="row3" style="margin-top:14px">
+        <div>
+          <label>Heat Cool Unit Line - Pipe Size</label>
+          <select id="heatCoolLineSize"></select>
+        </div>
+        <div>
+          <label>Heat Cool Unit Line - Distance (Mtr)</label>
+          <input type="number" id="heatCoolLineDist" min="0" step="0.1" value="0">
+        </div>
+        <div></div>
+      </div>
+
+      <div class="row3" style="margin-top:14px">
+        <div>
+          <label>Fresh Water Supply Line - Pipe Size</label>
+          <select id="freshWaterSize"></select>
+        </div>
+        <div>
+          <label>Fresh Water Supply Line - Fixed Pipe Length</label>
+          <input type="text" value="18 Mtr" readonly>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
 
   <div class="tbar noprint">
-    <button class="btn btn-da" id="btnAdd"></button>
-    <button class="btn btn-am" id="btnCalc">&#9654; Calculate</button>
-    <button class="btn btn-gh" id="btnReset">&#8634; Reset</button>
+    <button class="btn btn-am" id="btnCalc">Calculate</button>
+    <button class="btn btn-gh" id="btnReset">Reset</button>
     <div class="tbar-sep"></div>
-    <button class="btn btn-bl btn-sm" id="btnPdf">&#128196; Export PDF</button>
-    <button class="btn btn-gn btn-sm" id="btnXlsx">&#128202; Export Excel</button>
-    <button class="btn btn-gh btn-sm" onclick="window.print()">&#128438; Print</button>
-    <div class="tbar-sep"></div>
-    <button class="btn btn-gh btn-sm" id="btnSave">&#128190; Save Project</button>
-    <button class="btn btn-gh btn-sm" id="btnLoad">&#128194; Load Project</button>
-    <input type="file" id="fileImport" accept=".json">
+    <button class="btn btn-bl btn-sm" onclick="window.print()">Print</button>
   </div>
 
   <div id="results"></div>
 </div>
 
 <script>
-// =============================================
-// PIPE DATA - BSEN 1452 / PN15 / Class E
-// Using OD MAX for support calculation
-// =============================================
 var PK = ['0.5','0.75','1','1.25','1.5','2','3','4','6','8','10','12'];
-var P_OD = {}, P_OD_MIN = {}, P_OD_MAX = {};
-var P_WT_MIN = {}, P_WT_MAX = {};
-var P_DN = {}, P_INCH = {}, P_LABEL = {};
-
-(function () {
-  var data = {
-    '0.5' : {inch:'1/2"',    dn:'DN15',  odMin:21.2,  odMax:21.5,  wtMin:1.7,  wtMax:2.1},
-    '0.75': {inch:'3/4"',    dn:'DN20',  odMin:26.6,  odMax:26.9,  wtMin:1.9,  wtMax:2.5},
-    '1'   : {inch:'1"',      dn:'DN25',  odMin:33.4,  odMax:33.7,  wtMin:2.2,  wtMax:2.8},
-    '1.25': {inch:'1 1/4"',  dn:'DN32',  odMin:42.1,  odMax:42.4,  wtMin:2.7,  wtMax:3.3},
-    '1.5' : {inch:'1 1/2"',  dn:'DN40',  odMin:48.1,  odMax:48.4,  wtMin:3.1,  wtMax:3.7},
-    '2'   : {inch:'2"',      dn:'DN50',  odMin:60.2,  odMax:60.5,  wtMin:3.9,  wtMax:4.5},
-    '3'   : {inch:'3"',      dn:'DN80',  odMin:88.7,  odMax:89.1,  wtMin:5.7,  wtMax:6.6},
-    '4'   : {inch:'4"',      dn:'DN100', odMin:114.1, odMax:114.5, wtMin:7.3,  wtMax:8.4},
-    '6'   : {inch:'6"',      dn:'DN150', odMin:168.0, odMax:168.5, wtMin:10.8, wtMax:12.5},
-    '8'   : {inch:'8"',      dn:'DN200', odMin:218.8, odMax:219.4, wtMin:12.6, wtMax:14.5},
-    '10'  : {inch:'10"',     dn:'DN250', odMin:272.6, odMax:273.4, wtMin:15.7, wtMax:18.1},
-    '12'  : {inch:'12"',     dn:'DN300', odMin:323.4, odMax:324.3, wtMin:18.7, wtMax:21.6}
-  };
-
-  for (var k in data) {
-    P_INCH[k]   = data[k].inch;
-    P_DN[k]     = data[k].dn;
-    P_OD_MIN[k] = data[k].odMin;
-    P_OD_MAX[k] = data[k].odMax;
-    P_WT_MIN[k] = data[k].wtMin;
-    P_WT_MAX[k] = data[k].wtMax;
-    P_OD[k]     = data[k].odMax;
-    P_LABEL[k]  = data[k].inch + ' (' + data[k].dn + ' - OD ' + data[k].odMin + ' to ' + data[k].odMax + ' mm)';
-  }
-})();
-
-var TN={t1:'Full C-Channel Support',t2:'Threaded Rod & C-Channel Combo',t3:'Threaded Rod with Rubber Clamp'};
-var SP=1.5,OL=300,GP=6,GE=3,VH=80;
-
-var CAT_COLORS = {
-  struct: {color:'#e5a000',label:'Structural (C-Channel / Rod)'},
-  fix:    {color:'#3b82f6',label:'Fixings (Bolts, Nuts, Washers)'},
-  clamp:  {color:'#10b981',label:'Clamps / U-Straps'},
-  hw:     {color:'#a855f7',label:'U-Strap Hardware'}
+var P_INCH = {
+  '0.5':'1/2"',
+  '0.75':'3/4"',
+  '1':'1"',
+  '1.25':'1 1/4"',
+  '1.5':'1 1/2"',
+  '2':'2"',
+  '3':'3"',
+  '4':'4"',
+  '6':'6"',
+  '8':'8"',
+  '10':'10"',
+  '12':'12"'
 };
+var PIPE_SPEC = 'BSEN 1452 PN 15 Class E';
+var FIT_SPEC = 'BSEN 1452-3 SCH 80';
+var PIPE_LEN_PER_NO = 6;
 
-var R=[], NID=0, CALC_DATA=null;
-
-function addMat(mat,key,qty){
-  mat[key]=(mat[key]||0)+qty;
-}
-
-function newR(){
-  NID++;
-  return {id:NID, nm:'', ds:'', tp:'t1', col:false, pp:[{sz:'2',qty:1}]};
-}
-function findR(id){for(var i=0;i<R.length;i++) if(R[i].id===id) return R[i]; return null;}
-
-function sync(){
-  for(var i=0;i<R.length;i++){
-    var r=R[i],e;
-    e=document.getElementById('rn'+r.id);if(e)r.nm=e.value;
-    e=document.getElementById('rd'+r.id);if(e)r.ds=e.value;
-    e=document.getElementById('rt'+r.id);if(e)r.tp=e.value;
-    e=document.getElementById('rc'+r.id);if(e)r.col=e.classList.contains('collapsed');
-    for(var j=0;j<r.pp.length;j++){
-      e=document.getElementById('ps'+r.id+'x'+j);if(e) r.pp[j].sz=e.value;
-      e=document.getElementById('pq'+r.id+'x'+j);if(e) r.pp[j].qty=parseInt(e.value)||1;
-    }
-  }
-}
-
-function sOpts(sel){
+function sizeOptions(selected){
   var h='';
   for(var i=0;i<PK.length;i++){
     var k=PK[i];
-    h+='<option value="'+k+'"';
-    if(k===sel) h+=' selected';
-    h+='>'+P_INCH[k]+'</option>';
+    h+='<option value="'+k+'"'+(k===selected?' selected':'')+'>'+P_INCH[k]+'</option>';
   }
   return h;
 }
-
-function drawP(rid){
-  var r=findR(rid);if(!r)return;
-  var box=document.getElementById('pb'+rid);if(!box)return;
+function countOptions(selected){
   var h='';
-  for(var j=0;j<r.pp.length;j++){
-    var p=r.pp[j];
-    h+='<div class="prow">';
-    h+='<span class="pi">#'+(j+1)+'</span>';
-    h+='<select id="ps'+rid+'x'+j+'" onchange="chgP('+rid+','+j+',this.value)">'+sOpts(p.sz)+'</select>';
-    h+='<div class="qty-wrap"><label>Runs:</label><input type="number" id="pq'+rid+'x'+j+'" value="'+p.qty+'" min="1" max="50" step="1"></div>';
-    h+='<span class="pod" id="po'+rid+'x'+j+'">OD '+P_OD_MIN[p.sz]+'-'+P_OD_MAX[p.sz]+' mm</span>';
-    if(r.pp.length>1){
-      h+='<button class="btn-x" type="button" onclick="delP('+rid+','+j+')">&#10005;</button>';
-    } else {
-      h+='<button class="btn-x" type="button" disabled style="opacity:.3">&#10005;</button>';
-    }
-    h+='</div>';
+  for(var i=0;i<=10;i++){
+    h+='<option value="'+i+'"'+(String(i)===String(selected)?' selected':'')+'>'+i+'</option>';
   }
-  box.innerHTML=h;
+  return h;
 }
-
-function drawAll(){
-  var box=document.getElementById('routeBox');
-  var h='';
-  for(var i=0;i<R.length;i++){
-    var r=R[i],n=i+1,nn=n<10?'0'+n:''+n;
-    var cc=r.col?' collapsed':'';
-    var nmE=r.nm.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-    var tOpts='<option value="t1"'+(r.tp==='t1'?' selected':'')+'>Full C-Channel</option>';
-    tOpts+='<option value="t2"'+(r.tp==='t2'?' selected':'')+'>Threaded Rod + C-Channel</option>';
-    tOpts+='<option value="t3"'+(r.tp==='t3'?' selected':'')+'>Threaded Rod + Rubber Clamp</option>';
-    var rmBtn=R.length>1?'<button class="btn-dr noprint" type="button" onclick="event.stopPropagation();delR('+r.id+')">Remove</button>':'';
-
-    h+='<div class="card'+cc+'" id="rc'+r.id+'"><div class="card-hd rhead" onclick="togR('+r.id+')">';
-    h+='<div class="rtit"><span class="rnum">'+n+'</span>PIPE ROUTE '+nn+'</div>';
-    h+='<div class="ract">'+rmBtn+'<span class="chev">&#9662;</span></div></div>';
-    h+='<div class="card-bd"><div class="row3">';
-    h+='<div><label>Route Description</label><input type="text" id="rn'+r.id+'" value="'+nmE+'" placeholder="e.g. Plant Room to Pool"></div>';
-    h+='<div><label>Distance (m)</label><input type="number" id="rd'+r.id+'" value="'+r.ds+'" placeholder="0" min="0" step="0.1"></div>';
-    h+='<div><label>Support Type</label><select id="rt'+r.id+'">'+tOpts+'</select></div></div>';
-    h+='<div class="plbl">Pipe Sizes &amp; Number of Runs</div>';
-    h+='<div id="pb'+r.id+'"></div>';
-    h+='<button class="btn-ap noprint" type="button" onclick="addP('+r.id+')">+ Add Pipe Size</button>';
-    h+='</div></div>';
-  }
-  box.innerHTML=h;
-  for(var i=0;i<R.length;i++) drawP(R[i].id);
-  var ab=document.getElementById('btnAdd');
-  if(R.length>=10){ab.style.display='none';}
-  else{ab.style.display='';ab.textContent='+ Add Pipe Route '+(R.length+1);}
-}
-
-function togR(id){var el=document.getElementById('rc'+id);if(el)el.classList.toggle('collapsed');}
-function delR(id){sync();R=R.filter(function(r){return r.id!==id;});drawAll();}
-function addP(rid){
-  var r=findR(rid);if(!r)return;
-  for(var j=0;j<r.pp.length;j++){
-    var e=document.getElementById('ps'+rid+'x'+j);if(e) r.pp[j].sz=e.value;
-    e=document.getElementById('pq'+rid+'x'+j);if(e) r.pp[j].qty=parseInt(e.value)||1;
-  }
-  r.pp.push({sz:'2',qty:1});
-  drawP(rid);
-}
-function delP(rid,idx){
-  var r=findR(rid);if(!r||r.pp.length<=1)return;
-  for(var j=0;j<r.pp.length;j++){
-    var e=document.getElementById('ps'+rid+'x'+j);if(e) r.pp[j].sz=e.value;
-    e=document.getElementById('pq'+rid+'x'+j);if(e) r.pp[j].qty=parseInt(e.value)||1;
-  }
-  r.pp.splice(idx,1);drawP(rid);
-}
-function chgP(rid,idx,val){
-  var r=findR(rid);if(r)r.pp[idx].sz=val;
-  var od=document.getElementById('po'+rid+'x'+idx);
-  if(od)od.textContent='OD '+P_OD_MIN[val]+'-'+P_OD_MAX[val]+' mm';
-}
-
-document.getElementById('btnAdd').onclick=function(){if(R.length>=10)return;sync();R.push(newR());drawAll();};
-document.getElementById('btnCalc').onclick=function(){sync();runCalc();};
-document.getElementById('btnReset').onclick=function(){R=[];NID=0;document.getElementById('projName').value='';document.getElementById('projRef').value='';document.getElementById('results').innerHTML='';document.getElementById('results').classList.remove('show');CALC_DATA=null;R.push(newR());drawAll();};
-
-function runCalc(){
-  var pN=document.getElementById('projName').value||'Untitled Project';
-  var pR=document.getElementById('projRef').value||'-';
-  var all=[],grand={};
-  for(var i=0;i<R.length;i++){
-    var r=R[i],num=i+1;
-    var name=r.nm||('Pipe Route '+(num<10?'0'+num:num));
-    var dist=parseFloat(r.ds);if(isNaN(dist)||dist<=0)continue;
-    var pipes=[];
-    for(var j=0;j<r.pp.length;j++){
-      var q=r.pp[j].qty||1;
-      for(var k=0;k<q;k++) pipes.push(r.pp[j].sz);
-    }
-    var res=calc1(name,num,dist,r.tp,pipes,r.pp);
-    all.push(res);
-    var mk=Object.keys(res.mat);
-    for(var m=0;m<mk.length;m++) grand[mk[m]]=(grand[mk[m]]||0)+res.mat[mk[m]];
-  }
-  CALC_DATA={all:all,grand:grand,pN:pN,pR:pR};
-  showRes(all,grand,pN,pR);
-}
-
-function calc1(name,num,dist,type,pipes,pipeEntries){
-  var nP=pipes.length;
-  var nS=Math.floor(dist/SP)+1;
-  var sumOD=0;
-  for(var i=0;i<pipes.length;i++) sumOD+=P_OD[pipes[i]]/10;
-  var hori=sumOD+GP*(nP-1)+GE*2;
-  var sm=0,lg=0;
-  for(var i=0;i<pipes.length;i++){if(P_OD[pipes[i]]<=63)sm++;else lg++;}
-
-  var mat={},cCh=0,rod=0,desc=[];
-
-  function ustraps(){
-    for(var i=0;i<pipes.length;i++){
-      var p=pipes[i];
-      addMat(mat,'U-Strap Rubber Lined - '+P_INCH[p]+' ('+P_DN[p]+')',nS);
-    }
-    if(sm>0){
-      addMat(mat,'8mm Nut',sm*nS*2);
-      addMat(mat,'8mm Bolt',sm*nS*2);
-      addMat(mat,'8mm Washer',sm*nS*2);
-    }
-    if(lg>0){
-      addMat(mat,'10mm Nut',lg*nS*2);
-      addMat(mat,'10mm Bolt',lg*nS*2);
-      addMat(mat,'10mm Washer',lg*nS*2);
-    }
+function initControls(){
+  var sizeIds = [
+    'sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize',
+    'sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize',
+    'pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'
+  ];
+  for(var i=0;i<sizeIds.length;i++){
+    var el=document.getElementById(sizeIds[i]);
+    if(el) el.innerHTML=sizeOptions('2');
   }
 
-  if(type==='t1'){
-    var vt=VH*2,perS=hori+vt;cCh=perS*nS;
-    addMat(mat,'C-Channel 41x41mm - 3m lengths',Math.ceil(cCh/OL));
-    addMat(mat,'4-Hole L-Clamp',nS*2);
-    addMat(mat,'10mm x 20mm GL Bolt',nS*8);
-    addMat(mat,'10mm Spring Nut',nS*4);
-    addMat(mat,'10mm Unifix',nS*4);
-    ustraps();
-    desc.push('Horizontal: '+hori.toFixed(1)+'cm + Vertical: '+vt+'cm = <b>'+perS.toFixed(1)+'cm</b>/support');
-    desc.push('Total C-Channel: '+cCh.toFixed(1)+'cm = <b>'+Math.ceil(cCh/OL)+' x 3m</b>');
-  } else if(type==='t2'){
-    cCh=hori*nS;var vR=VH*2;rod=vR*nS;
-    addMat(mat,'C-Channel 41x41mm - 3m lengths',Math.ceil(cCh/OL));
-    addMat(mat,'10mm Threaded Rod - 3m lengths',Math.ceil(rod/OL));
-    addMat(mat,'10mm Nut',nS*6);
-    addMat(mat,'10mm Washer',nS*6);
-    addMat(mat,'10mm Unifix',nS*2);
-    ustraps();
-    desc.push('Horizontal C-Channel: '+hori.toFixed(1)+'cm/support');
-    desc.push('Vertical Rod: '+(VH*2)+'cm/support (80cm x 2)');
-    desc.push('Total C-Channel: '+cCh.toFixed(1)+'cm = <b>'+Math.ceil(cCh/OL)+' x 3m</b>');
-    desc.push('Total Rod: '+rod.toFixed(1)+'cm = <b>'+Math.ceil(rod/OL)+' x 3m</b>');
-  } else {
-    var vR=VH*2;rod=vR*nS;
-    addMat(mat,'10mm Threaded Rod - 3m lengths',Math.ceil(rod/OL));
-    addMat(mat,'10mm Nut',nS*2);
-    addMat(mat,'10mm Washer',nS*2);
-    addMat(mat,'10mm Unifix',nS*1);
-    for(var i=0;i<pipes.length;i++){
-      var p=pipes[i];
-      addMat(mat,'Rubber Clamp - '+P_INCH[p]+' ('+P_DN[p]+')',nS);
-    }
-    desc.push('Vertical Rod: '+(VH*2)+'cm/support (80cm x 2)');
-    desc.push('No horizontal C-Channel');
-    desc.push('Total Rod: '+rod.toFixed(1)+'cm = <b>'+Math.ceil(rod/OL)+' x 3m</b>');
+  var countIds = [
+    'filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount',
+    'sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount'
+  ];
+  for(var j=0;j<countIds.length;j++){
+    var ce=document.getElementById(countIds[j]);
+    if(ce) ce.innerHTML=countOptions('0');
   }
-  return {name:name,num:num,dist:dist,type:type,pipes:pipes,pipeEntries:pipeEntries,nS:nS,hori:hori,mat:mat,desc:desc};
 }
 
-function getCat(item){
-  var il=item.toLowerCase();
-  if(il.indexOf('c-channel')>=0||il.indexOf('threaded rod')>=0) return 'struct';
-  if(il.indexOf('u-strap')>=0||il.indexOf('rubber clamp')>=0) return 'clamp';
-  if(il.indexOf('l-clamp')>=0||il.indexOf('bolt')>=0||il.indexOf('nut')>=0||il.indexOf('washer')>=0||il.indexOf('unifix')>=0||il.indexOf('spring')>=0) return 'fix';
-  return 'fix';
+function n(id){
+  return parseFloat(document.getElementById(id).value)||0;
 }
-function getCatClass(item){
-  var il=item.toLowerCase();
-  if(il.indexOf('c-channel')>=0||il.indexOf('threaded rod')>=0) return 'cat-struct';
-  if(il.indexOf('u-strap rubber')>=0||il.indexOf('rubber clamp')>=0) return 'cat-clamp';
-  return 'cat-fix';
+function s(id){
+  return document.getElementById(id).value;
 }
-function getUOM(item){
-  return 'Nos';
-}
-
 function escapeHtml(str){
   return String(str)
     .replace(/&/g,'&amp;')
@@ -442,16 +390,18 @@ function escapeHtml(str){
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#039;');
 }
-
-function buildCopyText(matObj){
-  var mk=Object.keys(matObj);
-  var lines=['Sl No\tItem Description\tQty\tUOM'];
-  for(var i=0;i<mk.length;i++){
-    lines.push((i+1)+'\t'+mk[i]+'\t'+matObj[mk[i]]+'\t'+getUOM(mk[i]));
-  }
-  return lines.join('\n');
+function addPipe(map,size,length,remark){
+  if(length<=0) return;
+  if(!map[size]) map[size]={length:0,remarks:[]};
+  map[size].length += length;
+  if(remark) map[size].remarks.push(remark);
 }
-
+function addFit(map,size,item,qty){
+  if(qty<=0) return;
+  var key=size+'||'+item;
+  if(!map[key]) map[key]={size:size,item:item,qty:0};
+  map[key].qty += qty;
+}
 function copyText(id){
   var ta=document.getElementById(id);
   if(!ta) return;
@@ -465,322 +415,220 @@ function copyText(id){
   });
 }
 
-function showRes(all,grand,pN,pR){
-  var el=document.getElementById('results');
-  if(all.length===0){
-    el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)"><p style="font-size:32px;margin-bottom:8px">&#9888;</p><p>Enter a distance &gt; 0 for at least one route.</p></div>';
-    el.classList.add('show');return;
+function runCalc(){
+  var pipeBrand = s('pipeBrand');
+  var fitBrand = s('fitBrand');
+  var projName = document.getElementById('projName').value || 'Untitled Project';
+  var projRef = document.getElementById('projRef').value || '-';
+
+  var pipes = {};
+  var fits = {};
+
+  function addFittingPoint(qty,size,needFemale){
+    if(qty<=0) return;
+    addPipe(pipes,size,qty*1.5,'Fittings point length');
+    addFit(fits,size,'90° Elbow',qty*4);
+    addFit(fits,size,'45° Elbow',qty*2);
+    addFit(fits,size,'Socket / Coupler',qty*1);
+    if(needFemale) addFit(fits,size,'Female Adaptor',qty*1);
   }
 
-  var h='<div class="stag" style="margin-bottom:18px">Calculation Results</div>';
+  addFittingPoint(n('qtyInlets'),'2',true);
+  addFittingPoint(n('qtyVacuum'),'2',true);
+  addFittingPoint(n('qtyOverflow'),'2',false);
+  addFittingPoint(n('qtySkimmers'),'2',false);
+  addFittingPoint(n('qtyMainDrains'),s('sizeMainDrain'),false);
 
-  h+='<div class="legend">';
-  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.struct.color+'"></div>'+CAT_COLORS.struct.label+'</div>';
-  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.fix.color+'"></div>'+CAT_COLORS.fix.label+'</div>';
-  h+='<div class="legend-item"><div class="legend-dot" style="background:'+CAT_COLORS.clamp.color+'"></div>'+CAT_COLORS.clamp.label+'</div>';
-  h+='</div>';
-
-  for(var i=0;i<all.length;i++){
-    var r=all[i],nn=r.num<10?'0'+r.num:''+r.num;
-    var bc=r.type==='t1'?'b1':r.type==='t2'?'b2':'b3';
-
-    var chips='';
-    for(var c=0;c<r.pipeEntries.length;c++){
-      var pe=r.pipeEntries[c];
-      chips+='<span class="chip">'+P_INCH[pe.sz]+' x '+pe.qty+' run'+(pe.qty>1?'s':'')+' | OD '+P_OD_MIN[pe.sz]+'-'+P_OD_MAX[pe.sz]+' mm</span>';
-    }
-
-    var odList='';
-    for(var c=0;c<r.pipes.length;c++){if(c>0)odList+=' + ';odList+=(P_OD[r.pipes[c]]/10).toFixed(1)+'cm';}
-
-    var note='<b>Horizontal/support:</b> Pipe ODs ('+odList+') + '+GP+'cm x '+(r.pipes.length-1)+' gaps + '+GE+'cm x 2 ends = <b>'+r.hori.toFixed(1)+'cm</b>';
-    for(var d=0;d<r.desc.length;d++) note+='<br>'+r.desc[d];
-
-    var rows='';
-    var mk=Object.keys(r.mat);
-    for(var m=0;m<mk.length;m++){
-      var item=mk[m];
-      var cc2=getCatClass(item);
-      rows+='<tr class="'+cc2+'">';
-      rows+='<td class="center">'+(m+1)+'</td>';
-      rows+='<td>'+escapeHtml(item)+'</td>';
-      rows+='<td class="right q">'+r.mat[item]+'</td>';
-      rows+='<td class="center">'+getUOM(item)+'</td>';
-      rows+='</tr>';
-    }
-
-    var copyId='copy_route_'+r.num;
-    var copyTextValue=escapeHtml(buildCopyText(r.mat));
-
-    h+='<div class="card"><div class="card-hd">';
-    h+='<h3 style="font-size:14px;font-weight:700">Route '+nn+': '+escapeHtml(r.name)+'</h3>';
-    h+='<span class="bdg '+bc+'">'+TN[r.type]+'</span></div><div class="card-bd">';
-    h+='<div class="sts">';
-    h+='<div class="st"><div class="sl">Distance</div><div class="sv">'+r.dist+'<span class="su">m</span></div></div>';
-    h+='<div class="st"><div class="sl">Supports</div><div class="sv">'+r.nS+'</div></div>';
-    h+='<div class="st"><div class="sl">Spacing</div><div class="sv">1.5<span class="su">m</span></div></div>';
-    h+='<div class="st"><div class="sl">Total Pipes</div><div class="sv">'+r.pipes.length+'</div></div></div>';
-    h+='<div class="ibar" style="margin-bottom:12px"><span>Pipes: <span class="chips">'+chips+'</span></span></div>';
-    h+='<div class="cnote">'+note+'</div>';
-    h+='<table class="mt"><thead><tr><th style="width:70px">Sl No</th><th>Item Description</th><th style="width:110px">Qty</th><th style="width:90px">UOM</th></tr></thead><tbody>'+rows+'</tbody></table>';
-
-    h+='<div class="copy-box noprint">';
-    h+='<div class="copy-head"><h4>Direct Copy Table</h4><button class="btn btn-gh btn-sm" onclick="copyText(\''+copyId+'\')">Copy</button></div>';
-    h+='<div class="copy-note">You can copy and paste this directly into Excel.</div>';
-    h+='<textarea id="'+copyId+'" readonly>'+copyTextValue+'</textarea>';
-    h+='</div>';
-
-    h+='</div></div>';
+  function addEquipmentPipe(countId,sizeId,lenEach,label){
+    var count = n(countId);
+    var size = s(sizeId);
+    if(count>0) addPipe(pipes,size,count*lenEach,label+' ('+count+' Nos)');
   }
 
-  var gk=Object.keys(grand);
-  var gRows='';
-  for(var g=0;g<gk.length;g++){
-    var item=gk[g];
-    var cc2=getCatClass(item);
-    gRows+='<tr class="'+cc2+'">';
-    gRows+='<td class="center">'+(g+1)+'</td>';
-    gRows+='<td>'+escapeHtml(item)+'</td>';
-    gRows+='<td class="right q">'+grand[item]+'</td>';
-    gRows+='<td class="center">'+getUOM(item)+'</td>';
-    gRows+='</tr>';
+  addEquipmentPipe('filterPumpCount','filterPumpSize',3,'Filter Pump Connection');
+  addEquipmentPipe('boosterPumpCount','boosterPumpSize',3,'Booster Pump Connection');
+  addEquipmentPipe('circulationPumpCount','circulationPumpSize',3,'Circulation Pump Connection');
+  addEquipmentPipe('featurePumpCount','featurePumpSize',3,'Feature Pump Connection');
+  addEquipmentPipe('sandFilterCount','sandFilterSize',3,'Sand Filter Connection');
+  addEquipmentPipe('uvUnitCount','uvUnitSize',3,'UV Unit Connection');
+  addEquipmentPipe('hcUnitCount','hcUnitSize',3,'Heat Cool Unit Connection');
+  addEquipmentPipe('dosingUnitCount','dosingUnitSize',12,'Dosing Unit Connection');
+
+  addPipe(pipes,s('pumpSuctionSize'),n('pumpSuctionDist'),'Pump Suction Connection');
+  addPipe(pipes,s('plantMainInletSize'),n('plantMainInletDist'),'Plant Room Main Inlet Line');
+  addPipe(pipes,s('heatCoolLineSize'),n('heatCoolLineDist'),'Heat Cool Unit Line');
+  addPipe(pipes,s('freshWaterSize'),18,'Fresh Water Supply Line');
+
+  renderResults({
+    projName:projName,
+    projRef:projRef,
+    pipeBrand:pipeBrand,
+    fitBrand:fitBrand,
+    pipes:pipes,
+    fits:fits
+  });
+}
+
+function renderResults(data){
+  var pipeKeys = Object.keys(data.pipes);
+  var fitKeys = Object.keys(data.fits);
+
+  pipeKeys.sort(function(a,b){ return parseFloat(a)-parseFloat(b); });
+  fitKeys.sort(function(a,b){
+    var as=parseFloat(data.fits[a].size), bs=parseFloat(data.fits[b].size);
+    if(as!==bs) return as-bs;
+    return data.fits[a].item.localeCompare(data.fits[b].item);
+  });
+
+  var totalLength = 0, totalPipeNos = 0;
+  var pipeRows = '';
+  var pipeCopy = ['Sl No\tPipe Size\tTotal Length (Mtr)\t6 Mtr Pipe Nos\tBrand\tSpecification'];
+
+  for(var i=0;i<pipeKeys.length;i++){
+    var size = pipeKeys[i];
+    var len = data.pipes[size].length;
+    var nos = Math.ceil(len / PIPE_LEN_PER_NO);
+    totalLength += len;
+    totalPipeNos += nos;
+
+    pipeRows += '<tr>';
+    pipeRows += '<td class="center">'+(i+1)+'</td>';
+    pipeRows += '<td>'+P_INCH[size]+'</td>';
+    pipeRows += '<td class="right q">'+len.toFixed(2)+'</td>';
+    pipeRows += '<td class="center">'+nos+'</td>';
+    pipeRows += '<td>'+escapeHtml(data.pipeBrand)+'</td>';
+    pipeRows += '<td>'+PIPE_SPEC+'</td>';
+    pipeRows += '</tr>';
+
+    pipeCopy.push([
+      i+1,
+      P_INCH[size],
+      len.toFixed(2),
+      nos,
+      data.pipeBrand,
+      PIPE_SPEC
+    ].join('\t'));
   }
 
-  var tS=0;for(var t=0;t<all.length;t++) tS+=all[t].nS;
-  var grandCopyId='copy_grand_total';
+  var fitRows = '';
+  var fitCopy = ['Sl No\tPipe Size\tItem Description\tQty\tUOM\tBrand\tSpecification'];
 
-  h+='<div class="grd">';
-  h+='<h2>&#9632; Grand Total - All Routes Combined</h2>';
-  h+='<div class="sub">'+escapeHtml(pN)+' | Ref: '+escapeHtml(pR)+' | '+all.length+' route'+(all.length>1?'s':'')+' | '+tS+' total supports</div>';
-  h+='<table class="mt"><thead><tr><th style="width:70px">Sl No</th><th>Item Description</th><th style="width:110px">Qty</th><th style="width:90px">UOM</th></tr></thead><tbody>'+gRows+'</tbody></table>';
+  var totalFitQty = 0;
+  for(var j=0;j<fitKeys.length;j++){
+    var f = data.fits[fitKeys[j]];
+    totalFitQty += f.qty;
 
-  h+='<div class="copy-box noprint">';
-  h+='<div class="copy-head"><h4>Direct Copy Table - Grand Total</h4><button class="btn btn-gh btn-sm" onclick="copyText(\''+grandCopyId+'\')">Copy</button></div>';
-  h+='<div class="copy-note">You can copy and paste this directly into Excel.</div>';
-  h+='<textarea id="'+grandCopyId+'" readonly>'+escapeHtml(buildCopyText(grand))+'</textarea>';
-  h+='</div>';
+    fitRows += '<tr>';
+    fitRows += '<td class="center">'+(j+1)+'</td>';
+    fitRows += '<td>'+P_INCH[f.size]+'</td>';
+    fitRows += '<td>'+escapeHtml(f.item)+'</td>';
+    fitRows += '<td class="right q">'+f.qty+'</td>';
+    fitRows += '<td class="center">Nos</td>';
+    fitRows += '<td>'+escapeHtml(data.fitBrand)+'</td>';
+    fitRows += '<td>'+FIT_SPEC+'</td>';
+    fitRows += '</tr>';
 
-  h+='</div>';
+    fitCopy.push([
+      j+1,
+      P_INCH[f.size],
+      f.item,
+      f.qty,
+      'Nos',
+      data.fitBrand,
+      FIT_SPEC
+    ].join('\t'));
+  }
 
-  el.innerHTML=h;
+  var html = '';
+  html += '<div class="card">';
+  html += '<div class="card-bd">';
+  html += '<div class="stag">Calculation Results</div>';
+
+  html += '<div class="sts">';
+  html += '<div class="st"><div class="sl">Project</div><div class="sv" style="font-size:16px">'+escapeHtml(data.projName)+'</div></div>';
+  html += '<div class="st"><div class="sl">Project Ref</div><div class="sv" style="font-size:16px">'+escapeHtml(data.projRef)+'</div></div>';
+  html += '<div class="st"><div class="sl">Total Pipe Length</div><div class="sv">'+totalLength.toFixed(2)+'<span class="su">Mtr</span></div></div>';
+  html += '<div class="st"><div class="sl">Total 6 Mtr Pipes</div><div class="sv">'+totalPipeNos+'</div></div>';
+  html += '<div class="st"><div class="sl">Total Fittings Qty</div><div class="sv">'+totalFitQty+'</div></div>';
+  html += '</div>';
+
+  html += '<div class="note">';
+  html += '<b>Pipe Brand:</b> '+escapeHtml(data.pipeBrand)+'<br>';
+  html += '<b>Pipe Specification:</b> '+PIPE_SPEC+'<br>';
+  html += '<b>Fittings Brand:</b> '+escapeHtml(data.fitBrand)+'<br>';
+  html += '<b>Fittings Specification:</b> '+FIT_SPEC;
+  html += '</div>';
+
+  html += '<div style="margin-top:20px;font-size:13px;font-weight:700;color:var(--am)">Final Pipe Summary</div>';
+  html += '<table class="mt"><thead><tr>';
+  html += '<th style="width:70px">Sl No</th>';
+  html += '<th>Pipe Size</th>';
+  html += '<th style="width:160px">Total Length (Mtr)</th>';
+  html += '<th style="width:140px">6 Mtr Pipe Nos</th>';
+  html += '<th>Brand</th>';
+  html += '<th>Specification</th>';
+  html += '</tr></thead><tbody>'+(pipeRows || '<tr><td colspan="6" class="center">No pipe quantity found</td></tr>')+'</tbody></table>';
+
+  html += '<div class="copy-box noprint">';
+  html += '<div class="copy-head"><h4>Direct Copy Table - Pipe Summary</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copyPipe\')">Copy</button></div>';
+  html += '<div class="copy-note">Copy and paste directly into Excel.</div>';
+  html += '<textarea id="copyPipe" readonly>'+escapeHtml(pipeCopy.join('\n'))+'</textarea>';
+  html += '</div>';
+
+  html += '<div style="margin-top:24px;font-size:13px;font-weight:700;color:var(--am)">Fittings Summary</div>';
+  html += '<table class="mt"><thead><tr>';
+  html += '<th style="width:70px">Sl No</th>';
+  html += '<th>Pipe Size</th>';
+  html += '<th>Item Description</th>';
+  html += '<th style="width:100px">Qty</th>';
+  html += '<th style="width:80px">UOM</th>';
+  html += '<th>Brand</th>';
+  html += '<th>Specification</th>';
+  html += '</tr></thead><tbody>'+(fitRows || '<tr><td colspan="7" class="center">No fittings quantity found</td></tr>')+'</tbody></table>';
+
+  html += '<div class="copy-box noprint">';
+  html += '<div class="copy-head"><h4>Direct Copy Table - Fittings Summary</h4><button class="btn btn-gh btn-sm" onclick="copyText(\'copyFit\')">Copy</button></div>';
+  html += '<div class="copy-note">Copy and paste directly into Excel.</div>';
+  html += '<textarea id="copyFit" readonly>'+escapeHtml(fitCopy.join('\n'))+'</textarea>';
+  html += '</div>';
+
+  html += '</div></div>';
+
+  var el = document.getElementById('results');
+  el.innerHTML = html;
   el.classList.add('show');
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-document.getElementById('btnPdf').onclick=function(){
-  if(!CALC_DATA||!CALC_DATA.all.length){alert('Please calculate first.');return;}
-  var d=CALC_DATA;
-  try{
-    var jsPDF=window.jspdf.jsPDF;
-    var doc=new jsPDF('p','mm','a4');
-    var W=210,mg=14,cw=W-mg*2;
-    var y=15;
+document.getElementById('btnCalc').onclick = runCalc;
 
-    doc.setFillColor(229,160,0);doc.rect(0,0,W,28,'F');
-    doc.setTextColor(11,14,20);doc.setFontSize(16);doc.setFont('helvetica','bold');
-    doc.text('uPVC Pipe Support Calculator',mg,12);
-    doc.setFontSize(9);doc.setFont('helvetica','normal');
-    doc.text('BSEN 1452 | PN 15 Class E | Water In Motion LLC',mg,19);
-    doc.setFontSize(10);doc.text(d.pN+' | Ref: '+d.pR,mg,25);
-    y=35;
+document.getElementById('btnReset').onclick = function(){
+  document.getElementById('projName').value='';
+  document.getElementById('projRef').value='';
+  document.getElementById('pipeBrand').value='Cosmoplast, UAE';
+  document.getElementById('fitBrand').value='Cosmoplast, UAE';
 
-    for(var i=0;i<d.all.length;i++){
-      var r=d.all[i];
-      var nn=r.num<10?'0'+r.num:''+r.num;
-      if(y>250){doc.addPage();y=15;}
+  var inputs = document.querySelectorAll('input[type="number"]');
+  for(var i=0;i<inputs.length;i++) inputs[i].value='0';
 
-      doc.setTextColor(229,160,0);doc.setFontSize(12);doc.setFont('helvetica','bold');
-      doc.text('Route '+nn+': '+r.name,mg,y);y+=5;
-      doc.setTextColor(80,80,80);doc.setFontSize(8);doc.setFont('helvetica','normal');
-      doc.text(TN[r.type]+' | Distance: '+r.dist+'m | Supports: '+r.nS+' | Pipes: '+r.pipes.length,mg,y);y+=3;
+  var countIds = [
+    'filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount',
+    'sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount'
+  ];
+  for(var j=0;j<countIds.length;j++) document.getElementById(countIds[j]).value='0';
 
-      var peText='Pipes: ';
-      for(var c=0;c<r.pipeEntries.length;c++){
-        var pe=r.pipeEntries[c];
-        if(c>0) peText+=', ';
-        peText+=P_INCH[pe.sz]+' x '+pe.qty+' | OD '+P_OD_MIN[pe.sz]+'-'+P_OD_MAX[pe.sz]+' mm';
-      }
-      doc.text(peText,mg,y);y+=5;
+  var sizeIds = [
+    'sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize',
+    'sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize',
+    'pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'
+  ];
+  for(var k=0;k<sizeIds.length;k++) document.getElementById(sizeIds[k]).value='2';
 
-      var tData=[];
-      var mk=Object.keys(r.mat);
-      for(var m=0;m<mk.length;m++) tData.push([String(m+1), mk[m], String(r.mat[mk[m]]), getUOM(mk[m])]);
-
-      doc.autoTable({
-        startY:y,
-        head:[['Sl No','Item Description','Qty','UOM']],
-        body:tData,
-        margin:{left:mg,right:mg},
-        styles:{fontSize:8,cellPadding:2},
-        headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold',fontSize:7},
-        columnStyles:{
-          0:{halign:'center',cellWidth:16},
-          2:{halign:'right',fontStyle:'bold',cellWidth:20},
-          3:{halign:'center',cellWidth:18}
-        },
-        theme:'grid',
-        didParseCell:function(data){
-          if(data.section==='body'){
-            var item=data.row.cells[1].text.join('');
-            var cat=getCat(item);
-            var colors={struct:[255,248,230],fix:[235,245,255],clamp:[230,255,245]};
-            data.cell.styles.fillColor=colors[cat]||[255,255,255];
-          }
-        }
-      });
-      y=doc.lastAutoTable.finalY+10;
-    }
-
-    if(y>230){doc.addPage();y=15;}
-    doc.setFillColor(229,160,0);doc.rect(mg,y-3,cw,8,'F');
-    doc.setTextColor(11,14,20);doc.setFontSize(11);doc.setFont('helvetica','bold');
-    doc.text('GRAND TOTAL - ALL ROUTES',mg+3,y+2);y+=10;
-
-    var gData=[];var gk=Object.keys(d.grand);
-    for(var g=0;g<gk.length;g++) gData.push([String(g+1), gk[g], String(d.grand[gk[g]]), getUOM(gk[g])]);
-
-    doc.autoTable({
-      startY:y,
-      head:[['Sl No','Item Description','Qty','UOM']],
-      body:gData,
-      margin:{left:mg,right:mg},
-      styles:{fontSize:8,cellPadding:2},
-      headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold',fontSize:7},
-      columnStyles:{
-        0:{halign:'center',cellWidth:16},
-        2:{halign:'right',fontStyle:'bold',cellWidth:20},
-        3:{halign:'center',cellWidth:18}
-      },
-      theme:'grid',
-      didParseCell:function(data){
-        if(data.section==='body'){
-          var item=data.row.cells[1].text.join('');
-          var cat=getCat(item);
-          var colors={struct:[255,248,230],fix:[235,245,255],clamp:[230,255,245]};
-          data.cell.styles.fillColor=colors[cat]||[255,255,255];
-        }
-      }
-    });
-
-    var pages=doc.internal.getNumberOfPages();
-    for(var p=1;p<=pages;p++){
-      doc.setPage(p);
-      doc.setFontSize(7);doc.setTextColor(150);
-      doc.text('Generated: '+new Date().toLocaleDateString()+' | '+d.pN+' | Water In Motion LLC',mg,290);
-      doc.text('Page '+p+'/'+pages,W-mg-20,290);
-    }
-
-    doc.save(d.pN.replace(/\s+/g,'_')+'_Pipe_Support.pdf');
-  }catch(e){alert('PDF export error: '+e.message);console.error(e);}
+  document.getElementById('results').innerHTML='';
+  document.getElementById('results').classList.remove('show');
 };
 
-document.getElementById('btnXlsx').onclick=function(){
-  if(!CALC_DATA||!CALC_DATA.all.length){alert('Please calculate first.');return;}
-  var d=CALC_DATA;
-  try{
-    var wb=XLSX.utils.book_new();
-
-    var sumData=[
-      ['uPVC PIPE SUPPORT CALCULATOR'],
-      ['BSEN 1452 / PN 15 Class E'],
-      ['Project: '+d.pN,'Ref: '+d.pR,'Date: '+new Date().toLocaleDateString()],
-      [],
-      ['GRAND TOTAL - ALL ROUTES'],
-      ['Sl No','Item Description','Qty','UOM']
-    ];
-    var gk=Object.keys(d.grand);
-    for(var g=0;g<gk.length;g++){
-      sumData.push([g+1,gk[g],d.grand[gk[g]],getUOM(gk[g])]);
-    }
-    var ws1=XLSX.utils.aoa_to_sheet(sumData);
-    ws1['!cols']=[{wch:10},{wch:55},{wch:12},{wch:10}];
-    XLSX.utils.book_append_sheet(wb,ws1,'Grand Total');
-
-    for(var i=0;i<d.all.length;i++){
-      var r=d.all[i];
-      var nn=r.num<10?'0'+r.num:''+r.num;
-      var rData=[
-        ['ROUTE '+nn+': '+r.name],
-        ['Support Type: '+TN[r.type]],
-        ['Distance: '+r.dist+'m','Supports: '+r.nS,'Spacing: 1.5m','Total Pipes: '+r.pipes.length],
-        [],
-        ['Pipe Size','No. of Runs','OD Min (mm)','OD Max (mm)','WT Min (mm)','WT Max (mm)','DN']
-      ];
-      for(var c=0;c<r.pipeEntries.length;c++){
-        var pe=r.pipeEntries[c];
-        rData.push([P_INCH[pe.sz],pe.qty,P_OD_MIN[pe.sz],P_OD_MAX[pe.sz],P_WT_MIN[pe.sz],P_WT_MAX[pe.sz],P_DN[pe.sz]]);
-      }
-      rData.push([]);
-      rData.push(['Sl No','Item Description','Qty','UOM']);
-      var mk=Object.keys(r.mat);
-      for(var m=0;m<mk.length;m++){
-        rData.push([m+1,mk[m],r.mat[mk[m]],getUOM(mk[m])]);
-      }
-      var ws=XLSX.utils.aoa_to_sheet(rData);
-      ws['!cols']=[{wch:10},{wch:50},{wch:12},{wch:12},{wch:12},{wch:12},{wch:10}];
-      XLSX.utils.book_append_sheet(wb,ws,'Route '+nn);
-    }
-
-    XLSX.writeFile(wb,d.pN.replace(/\s+/g,'_')+'_Pipe_Support.xlsx');
-  }catch(e){alert('Excel export error: '+e.message);console.error(e);}
-};
-
-document.getElementById('btnSave').onclick=function(){
-  sync();
-  var data={
-    version:4,
-    standard:'BSEN 1452 PN15 Class E',
-    projName:document.getElementById('projName').value,
-    projRef:document.getElementById('projRef').value,
-    routes:R,
-    nextId:NID,
-    savedAt:new Date().toISOString()
-  };
-  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  var fn=(data.projName||'project').replace(/\s+/g,'_')+'_pipe_support.json';
-  a.download=fn;
-  a.click();
-  URL.revokeObjectURL(a.href);
-};
-
-document.getElementById('btnLoad').onclick=function(){
-  document.getElementById('fileImport').click();
-};
-
-document.getElementById('fileImport').onchange=function(e){
-  var file=e.target.files[0];
-  if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    try{
-      var data=JSON.parse(ev.target.result);
-      if(!data.routes){alert('Invalid project file.');return;}
-      document.getElementById('projName').value=data.projName||'';
-      document.getElementById('projRef').value=data.projRef||'';
-      R=data.routes;
-      NID=data.nextId||R.length;
-      for(var i=0;i<R.length;i++){
-        for(var j=0;j<R[i].pp.length;j++){
-          if(typeof R[i].pp[j]==='string'){
-            R[i].pp[j]={sz:R[i].pp[j],qty:1};
-          }
-        }
-      }
-      document.getElementById('results').innerHTML='';
-      document.getElementById('results').classList.remove('show');
-      CALC_DATA=null;
-      drawAll();
-      alert('Project loaded successfully!');
-    }catch(err){alert('Error reading file: '+err.message);}
-  };
-  reader.readAsText(file);
-  e.target.value='';
-};
-
-R.push(newR());
-drawAll();
+initControls();
 </script>
 </body>
 </html>
