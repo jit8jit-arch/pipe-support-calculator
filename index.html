@@ -43,6 +43,7 @@ textarea{min-height:180px;resize:vertical}
 .btn-gh{background:var(--c1);color:var(--t1);border:1px solid var(--bd)}.btn-gh:hover{background:var(--c2)}
 .btn-da{background:transparent;color:var(--am);border:2px dashed var(--am);opacity:.8}.btn-da:hover{opacity:1;background:var(--amd)}
 .btn-bl{background:var(--bl);color:#fff}.btn-bl:hover{opacity:.92}
+.btn-gn{background:var(--gn);color:#fff}.btn-gn:hover{opacity:.92}
 .btn-sm{padding:7px 14px;font-size:12px}
 .btn-ap{width:100%;padding:8px;background:var(--amd);color:var(--am);border:1px dashed rgba(229,160,0,.4);border-radius:7px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:4px}
 .btn-ap:hover{background:rgba(229,160,0,.2)}
@@ -96,6 +97,8 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
 .mini-card{background:var(--c3);border:1px solid var(--bd);border-radius:8px;padding:12px}
 .sec-title{font-size:13px;font-weight:700;color:var(--am);margin-bottom:10px}
 
+#fileImport{display:none}
+
 @media print{
   body{background:#fff;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .hdr{position:relative;background:#fff;border-color:#333}
@@ -107,6 +110,10 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
   #results.show{display:block}
 }
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -338,7 +345,14 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
   <div class="tbar noprint">
     <button class="btn btn-am" id="btnCalc">Calculate</button>
     <button class="btn btn-gh" id="btnReset">Reset</button>
-    <button class="btn btn-bl btn-sm" onclick="window.print()">Print</button>
+    <div class="tbar-sep"></div>
+    <button class="btn btn-bl btn-sm" id="btnPdf">Export PDF</button>
+    <button class="btn btn-gn btn-sm" id="btnXlsx">Export Excel</button>
+    <button class="btn btn-gh btn-sm" onclick="window.print()">Print</button>
+    <div class="tbar-sep"></div>
+    <button class="btn btn-gh btn-sm" id="btnSave">Save Project</button>
+    <button class="btn btn-gh btn-sm" id="btnLoad">Load Project</button>
+    <input type="file" id="fileImport" accept=".json">
   </div>
 
   <div id="results"></div>
@@ -383,6 +397,14 @@ var FIT_SPEC = 'BSEN 1452-3 SCH 80';
 var PIPE_LEN_PER_NO = 6;
 var TN = {t1:'Full C-Channel Support', t2:'Threaded Rod & C-Channel Combo', t3:'Threaded Rod with Rubber Clamp'};
 var SP = 1.5, OL = 300, GP = 6, GE = 3, VH = 80;
+
+var CAT_LABELS = {
+  struct:'Structural',
+  fix:'Fixings',
+  clamp:'Clamps'
+};
+
+var LAST_RESULT = null;
 
 // =============================================
 // HELPERS
@@ -452,6 +474,143 @@ function getCatClass(item){
   if(c==='struct') return 'cat-struct';
   if(c==='clamp') return 'cat-clamp';
   return 'cat-fix';
+}
+function getCatLabel(item){
+  return CAT_LABELS[getCat(item)] || 'Fixings';
+}
+function flattenPipeMap(pipeMap){
+  var keys=Object.keys(pipeMap).sort(function(a,b){ return parseFloat(a)-parseFloat(b); });
+  var rows=[];
+  for(var i=0;i<keys.length;i++){
+    var size=keys[i];
+    var len=pipeMap[size].length;
+    rows.push({
+      sl:i+1,
+      size:size,
+      sizeLabel:P_INCH[size],
+      length:len,
+      pipeNos:Math.ceil(len/PIPE_LEN_PER_NO),
+      remarks:(pipeMap[size].remarks||[]).join(' | ')
+    });
+  }
+  return rows;
+}
+function flattenFitMap(fitMap){
+  var keys=Object.keys(fitMap).sort(function(a,b){
+    var as=parseFloat(fitMap[a].size), bs=parseFloat(fitMap[b].size);
+    if(as!==bs) return as-bs;
+    return fitMap[a].item.localeCompare(fitMap[b].item);
+  });
+  var rows=[];
+  for(var i=0;i<keys.length;i++){
+    var f=fitMap[keys[i]];
+    rows.push({
+      sl:i+1,
+      size:f.size,
+      sizeLabel:P_INCH[f.size],
+      item:f.item,
+      qty:f.qty
+    });
+  }
+  return rows;
+}
+function flattenSupportGrand(grand){
+  var keys=Object.keys(grand);
+  var rows=[];
+  for(var i=0;i<keys.length;i++){
+    rows.push({
+      sl:i+1,
+      item:keys[i],
+      qty:grand[keys[i]],
+      category:getCatLabel(keys[i])
+    });
+  }
+  return rows;
+}
+function getProjectData(){
+  syncRoutes();
+  return {
+    version:5,
+    standardPipe:PIPE_SPEC,
+    standardFit:FIT_SPEC,
+    projName:document.getElementById('projName').value,
+    projRef:document.getElementById('projRef').value,
+    pipeBrand:s('pipeBrand'),
+    fitBrand:s('fitBrand'),
+    extraSupportType:s('extraSupportType'),
+    qtyInlets:n('qtyInlets'),
+    qtyVacuum:n('qtyVacuum'),
+    qtyOverflow:n('qtyOverflow'),
+    qtySkimmers:n('qtySkimmers'),
+    qtyMainDrains:n('qtyMainDrains'),
+    sizeMainDrain:s('sizeMainDrain'),
+    filterPumpCount:n('filterPumpCount'),
+    filterPumpSize:s('filterPumpSize'),
+    boosterPumpCount:n('boosterPumpCount'),
+    boosterPumpSize:s('boosterPumpSize'),
+    circulationPumpCount:n('circulationPumpCount'),
+    circulationPumpSize:s('circulationPumpSize'),
+    featurePumpCount:n('featurePumpCount'),
+    featurePumpSize:s('featurePumpSize'),
+    sandFilterCount:n('sandFilterCount'),
+    sandFilterSize:s('sandFilterSize'),
+    uvUnitCount:n('uvUnitCount'),
+    uvUnitSize:s('uvUnitSize'),
+    hcUnitCount:n('hcUnitCount'),
+    hcUnitSize:s('hcUnitSize'),
+    dosingUnitCount:n('dosingUnitCount'),
+    dosingUnitSize:s('dosingUnitSize'),
+    pumpSuctionSize:s('pumpSuctionSize'),
+    pumpSuctionDist:n('pumpSuctionDist'),
+    plantMainInletSize:s('plantMainInletSize'),
+    plantMainInletDist:n('plantMainInletDist'),
+    heatCoolLineSize:s('heatCoolLineSize'),
+    heatCoolLineDist:n('heatCoolLineDist'),
+    freshWaterSize:s('freshWaterSize'),
+    routes:R,
+    nextId:NID,
+    savedAt:new Date().toISOString()
+  };
+}
+function applyProjectData(data){
+  document.getElementById('projName').value=data.projName||'';
+  document.getElementById('projRef').value=data.projRef||'';
+  document.getElementById('pipeBrand').value=data.pipeBrand||'Cosmoplast, UAE';
+  document.getElementById('fitBrand').value=data.fitBrand||'Cosmoplast, UAE';
+  document.getElementById('extraSupportType').value=data.extraSupportType||'t1';
+
+  var ids = [
+    'qtyInlets','qtyVacuum','qtyOverflow','qtySkimmers','qtyMainDrains',
+    'filterPumpCount','boosterPumpCount','circulationPumpCount','featurePumpCount',
+    'sandFilterCount','uvUnitCount','hcUnitCount','dosingUnitCount',
+    'pumpSuctionDist','plantMainInletDist','heatCoolLineDist'
+  ];
+  for(var i=0;i<ids.length;i++){
+    if(document.getElementById(ids[i])) document.getElementById(ids[i]).value = data[ids[i]]!=null ? data[ids[i]] : 0;
+  }
+
+  var sizeIds = [
+    'sizeMainDrain','filterPumpSize','boosterPumpSize','circulationPumpSize','featurePumpSize',
+    'sandFilterSize','uvUnitSize','hcUnitSize','dosingUnitSize',
+    'pumpSuctionSize','plantMainInletSize','heatCoolLineSize','freshWaterSize'
+  ];
+  for(var j=0;j<sizeIds.length;j++){
+    if(document.getElementById(sizeIds[j])) document.getElementById(sizeIds[j]).value = data[sizeIds[j]] || '2';
+  }
+
+  R = data.routes || [newR()];
+  NID = data.nextId || R.length || 0;
+
+  for(var r=0;r<R.length;r++){
+    if(!R[r].pp || !R[r].pp.length) R[r].pp=[{sz:'2',qty:1}];
+    for(var p=0;p<R[r].pp.length;p++){
+      if(typeof R[r].pp[p] === 'string') R[r].pp[p]={sz:R[r].pp[p],qty:1};
+    }
+  }
+  if(!R.length){
+    R.push(newR());
+  }
+  drawRoutes();
 }
 
 // =============================================
@@ -674,19 +833,16 @@ function runCalc(){
   var fitBrand = s('fitBrand');
   var extraSupportType = s('extraSupportType');
 
-  var totalPipes = {};       // combined pipe summary
-  var fittings = {};         // fittings summary
-  var supportLines = [];     // support detail lines
-  var supportGrand = {};     // grand support materials
+  var totalPipes = {};
+  var fittings = {};
+  var supportLines = [];
+  var supportGrand = {};
 
   function addSupportGrand(mat){
     var ks=Object.keys(mat);
     for(var i=0;i<ks.length;i++) addMat(supportGrand, ks[i], mat[ks[i]]);
   }
 
-  // -----------------------------------------
-  // 1) MANUAL SUPPORT ROUTES
-  // -----------------------------------------
   for(var i=0;i<R.length;i++){
     var r=R[i];
     var dist=parseFloat(r.ds);
@@ -702,9 +858,6 @@ function runCalc(){
     addSupportGrand(res.mat);
   }
 
-  // -----------------------------------------
-  // 2) FITTINGS + ADDITIONAL PIPE QTY
-  // -----------------------------------------
   var extraPipeBySize = {};
 
   function addExtraPipe(size,length,remark){
@@ -747,9 +900,6 @@ function runCalc(){
   addExtraPipe(s('heatCoolLineSize'),n('heatCoolLineDist'),'Heat Cool Unit Line');
   addExtraPipe(s('freshWaterSize'),18,'Fresh Water Supply Line');
 
-  // -----------------------------------------
-  // 3) SUPPORT FOR ADDITIONAL PIPE QUANTITIES
-  // -----------------------------------------
   var extraSizes=Object.keys(extraPipeBySize);
   extraSizes.sort(function(a,b){ return parseFloat(a)-parseFloat(b); });
   for(var e=0;e<extraSizes.length;e++){
@@ -763,7 +913,7 @@ function runCalc(){
     addSupportGrand(resExtra.mat);
   }
 
-  renderResults({
+  LAST_RESULT = {
     projName:projName,
     projRef:projRef,
     pipeBrand:pipeBrand,
@@ -771,55 +921,51 @@ function runCalc(){
     totalPipes:totalPipes,
     fittings:fittings,
     supportLines:supportLines,
-    supportGrand:supportGrand
-  });
+    supportGrand:supportGrand,
+    pipeRows:flattenPipeMap(totalPipes),
+    fitRows:flattenFitMap(fittings),
+    supportGrandRows:flattenSupportGrand(supportGrand)
+  };
+
+  renderResults(LAST_RESULT);
 }
 
 // =============================================
 // RENDER RESULTS
 // =============================================
 function renderResults(data){
-  var pipeKeys=Object.keys(data.totalPipes);
-  pipeKeys.sort(function(a,b){ return parseFloat(a)-parseFloat(b); });
-
-  var fitKeys=Object.keys(data.fittings);
-  fitKeys.sort(function(a,b){
-    var as=parseFloat(data.fittings[a].size), bs=parseFloat(data.fittings[b].size);
-    if(as!==bs) return as-bs;
-    return data.fittings[a].item.localeCompare(data.fittings[b].item);
-  });
+  var pipeRowsObj=data.pipeRows||flattenPipeMap(data.totalPipes);
+  var fitRowsObj=data.fitRows||flattenFitMap(data.fittings);
+  var supportGrandRows=data.supportGrandRows||flattenSupportGrand(data.supportGrand);
 
   var totalLen=0, totalPipeNos=0;
   var pipeRows='';
   var pipeCopy=['Sl No\tPipe Size\tTotal Length (Mtr)\t6 Mtr Pipe Nos\tBrand\tSpecification'];
-
-  for(var i=0;i<pipeKeys.length;i++){
-    var size=pipeKeys[i];
-    var len=data.totalPipes[size].length;
-    var nos=Math.ceil(len/PIPE_LEN_PER_NO);
-    totalLen+=len;
-    totalPipeNos+=nos;
+  for(var i=0;i<pipeRowsObj.length;i++){
+    var pr=pipeRowsObj[i];
+    totalLen+=pr.length;
+    totalPipeNos+=pr.pipeNos;
 
     pipeRows+='<tr>';
-    pipeRows+='<td class="center">'+(i+1)+'</td>';
-    pipeRows+='<td>'+P_INCH[size]+'</td>';
-    pipeRows+='<td class="right q">'+len.toFixed(2)+'</td>';
-    pipeRows+='<td class="center">'+nos+'</td>';
+    pipeRows+='<td class="center">'+pr.sl+'</td>';
+    pipeRows+='<td>'+pr.sizeLabel+'</td>';
+    pipeRows+='<td class="right q">'+pr.length.toFixed(2)+'</td>';
+    pipeRows+='<td class="center">'+pr.pipeNos+'</td>';
     pipeRows+='<td>'+escapeHtml(data.pipeBrand)+'</td>';
     pipeRows+='<td>'+PIPE_SPEC+'</td>';
     pipeRows+='</tr>';
 
-    pipeCopy.push([i+1,P_INCH[size],len.toFixed(2),nos,data.pipeBrand,PIPE_SPEC].join('\t'));
+    pipeCopy.push([pr.sl,pr.sizeLabel,pr.length.toFixed(2),pr.pipeNos,data.pipeBrand,PIPE_SPEC].join('\t'));
   }
 
   var fitRows='', fitCopy=['Sl No\tPipe Size\tItem Description\tQty\tUOM\tBrand\tSpecification'], totalFitQty=0;
-  for(var j=0;j<fitKeys.length;j++){
-    var f=data.fittings[fitKeys[j]];
+  for(var j=0;j<fitRowsObj.length;j++){
+    var f=fitRowsObj[j];
     totalFitQty+=f.qty;
 
     fitRows+='<tr>';
-    fitRows+='<td class="center">'+(j+1)+'</td>';
-    fitRows+='<td>'+P_INCH[f.size]+'</td>';
+    fitRows+='<td class="center">'+f.sl+'</td>';
+    fitRows+='<td>'+f.sizeLabel+'</td>';
     fitRows+='<td>'+escapeHtml(f.item)+'</td>';
     fitRows+='<td class="right q">'+f.qty+'</td>';
     fitRows+='<td class="center">Nos</td>';
@@ -827,7 +973,7 @@ function renderResults(data){
     fitRows+='<td>'+FIT_SPEC+'</td>';
     fitRows+='</tr>';
 
-    fitCopy.push([j+1,P_INCH[f.size],f.item,f.qty,'Nos',data.fitBrand,FIT_SPEC].join('\t'));
+    fitCopy.push([f.sl,f.sizeLabel,f.item,f.qty,'Nos',data.fitBrand,FIT_SPEC].join('\t'));
   }
 
   var supportDetailHtml='';
@@ -856,16 +1002,16 @@ function renderResults(data){
     supportDetailHtml+='</div></div>';
   }
 
-  var sgKeys=Object.keys(data.supportGrand);
   var sgRows='', sgCopy=['Sl No\tItem Description\tQty\tUOM'];
-  for(var g=0;g<sgKeys.length;g++){
-    sgRows+='<tr class="'+getCatClass(sgKeys[g])+'">';
-    sgRows+='<td class="center">'+(g+1)+'</td>';
-    sgRows+='<td>'+escapeHtml(sgKeys[g])+'</td>';
-    sgRows+='<td class="right q">'+data.supportGrand[sgKeys[g]]+'</td>';
+  for(var g=0;g<supportGrandRows.length;g++){
+    var sgr=supportGrandRows[g];
+    sgRows+='<tr class="'+getCatClass(sgr.item)+'">';
+    sgRows+='<td class="center">'+sgr.sl+'</td>';
+    sgRows+='<td>'+escapeHtml(sgr.item)+'</td>';
+    sgRows+='<td class="right q">'+sgr.qty+'</td>';
     sgRows+='<td class="center">Nos</td>';
     sgRows+='</tr>';
-    sgCopy.push([g+1,sgKeys[g],data.supportGrand[sgKeys[g]],'Nos'].join('\t'));
+    sgCopy.push([sgr.sl,sgr.item,sgr.qty,'Nos'].join('\t'));
   }
 
   var html='';
@@ -927,6 +1073,262 @@ function renderResults(data){
 }
 
 // =============================================
+// PDF EXPORT
+// =============================================
+document.getElementById('btnPdf').onclick=function(){
+  if(!LAST_RESULT){
+    alert('Please calculate first.');
+    return;
+  }
+  try{
+    var d=LAST_RESULT;
+    var jsPDF=window.jspdf.jsPDF;
+    var doc=new jsPDF('p','mm','a4');
+    var W=210, mg=12, y=15;
+
+    function addHeader(title, subtitle){
+      doc.setFillColor(229,160,0);
+      doc.rect(0,0,W,24,'F');
+      doc.setTextColor(11,14,20);
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(15);
+      doc.text(title,mg,10);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(8);
+      doc.text(subtitle,mg,17);
+      y=30;
+    }
+
+    function addSectionTitle(text){
+      if(y>265){ doc.addPage(); y=15; }
+      doc.setTextColor(229,160,0);
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(11);
+      doc.text(text,mg,y);
+      y+=4;
+    }
+
+    function supportFillColor(cat){
+      if(cat==='struct') return [255,248,230];
+      if(cat==='clamp') return [230,255,245];
+      return [235,245,255];
+    }
+
+    addHeader(
+      'uPVC Pipe, Fittings & Support Calculator',
+      d.projName+' | Ref: '+d.projRef+' | Pipe: '+d.pipeBrand+' | Fittings: '+d.fitBrand
+    );
+
+    addSectionTitle('Final Pipe Summary');
+    doc.autoTable({
+      startY:y,
+      head:[['Sl No','Pipe Size','Total Length (Mtr)','6 Mtr Pipe Nos','Brand','Specification']],
+      body:d.pipeRows.map(function(r){
+        return [r.sl,r.sizeLabel,r.length.toFixed(2),r.pipeNos,d.pipeBrand,PIPE_SPEC];
+      }),
+      margin:{left:mg,right:mg},
+      styles:{fontSize:7,cellPadding:2},
+      headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold'},
+      theme:'grid'
+    });
+    y=doc.lastAutoTable.finalY+8;
+
+    addSectionTitle('Final Fittings Summary');
+    doc.autoTable({
+      startY:y,
+      head:[['Sl No','Pipe Size','Item Description','Qty','UOM','Brand','Specification']],
+      body:d.fitRows.map(function(r){
+        return [r.sl,r.sizeLabel,r.item,r.qty,'Nos',d.fitBrand,FIT_SPEC];
+      }),
+      margin:{left:mg,right:mg},
+      styles:{fontSize:7,cellPadding:2},
+      headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold'},
+      theme:'grid'
+    });
+    y=doc.lastAutoTable.finalY+8;
+
+    for(var i=0;i<d.supportLines.length;i++){
+      var sl=d.supportLines[i];
+      addSectionTitle('Support Detail - '+sl.name+' ('+TN[sl.type]+')');
+      var mk=Object.keys(sl.mat);
+      doc.autoTable({
+        startY:y,
+        head:[['Sl No','Item Description','Qty','UOM','Category']],
+        body:mk.map(function(item,idx){
+          return [idx+1,item,sl.mat[item],'Nos',getCatLabel(item)];
+        }),
+        margin:{left:mg,right:mg},
+        styles:{fontSize:7,cellPadding:2},
+        headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold'},
+        theme:'grid',
+        didParseCell:function(dataCell){
+          if(dataCell.section==='body'){
+            var item=dataCell.row.cells[1].text.join('');
+            dataCell.cell.styles.fillColor=supportFillColor(getCat(item));
+          }
+        }
+      });
+      y=doc.lastAutoTable.finalY+6;
+    }
+
+    addSectionTitle('Grand Total Support Materials');
+    doc.autoTable({
+      startY:y,
+      head:[['Sl No','Item Description','Qty','UOM','Category']],
+      body:d.supportGrandRows.map(function(r){
+        return [r.sl,r.item,r.qty,'Nos',r.category];
+      }),
+      margin:{left:mg,right:mg},
+      styles:{fontSize:7,cellPadding:2},
+      headStyles:{fillColor:[30,35,48],textColor:[229,160,0],fontStyle:'bold'},
+      theme:'grid',
+      didParseCell:function(dataCell){
+        if(dataCell.section==='body'){
+          var item=dataCell.row.cells[1].text.join('');
+          dataCell.cell.styles.fillColor=supportFillColor(getCat(item));
+        }
+      }
+    });
+
+    var pages=doc.internal.getNumberOfPages();
+    for(var p=1;p<=pages;p++){
+      doc.setPage(p);
+      doc.setFontSize(7);
+      doc.setTextColor(140);
+      doc.text('Generated: '+new Date().toLocaleDateString()+' | Water In Motion LLC',mg,290);
+      doc.text('Page '+p+'/'+pages,W-28,290);
+    }
+
+    doc.save((d.projName||'project').replace(/\s+/g,'_')+'_Pipe_Fittings_Support.pdf');
+  }catch(e){
+    alert('PDF export error: '+e.message);
+    console.error(e);
+  }
+};
+
+// =============================================
+// EXCEL EXPORT
+// =============================================
+document.getElementById('btnXlsx').onclick=function(){
+  if(!LAST_RESULT){
+    alert('Please calculate first.');
+    return;
+  }
+  try{
+    var d=LAST_RESULT;
+    var wb=XLSX.utils.book_new();
+
+    var summaryData=[
+      ['uPVC PIPE, FITTINGS & SUPPORT CALCULATOR'],
+      ['Pipe Specification', PIPE_SPEC],
+      ['Fittings Specification', FIT_SPEC],
+      ['Project', d.projName],
+      ['Project Ref', d.projRef],
+      ['Pipe Brand', d.pipeBrand],
+      ['Fittings Brand', d.fitBrand]
+    ];
+    var wsSummary=XLSX.utils.aoa_to_sheet(summaryData);
+    wsSummary['!cols']=[{wch:28},{wch:40}];
+    XLSX.utils.book_append_sheet(wb,wsSummary,'Summary');
+
+    var pipeData=[['Sl No','Pipe Size','Total Length (Mtr)','6 Mtr Pipe Nos','Brand','Specification','Remarks']];
+    for(var i=0;i<d.pipeRows.length;i++){
+      var pr=d.pipeRows[i];
+      pipeData.push([pr.sl,pr.sizeLabel,pr.length,pr.pipeNos,d.pipeBrand,PIPE_SPEC,pr.remarks]);
+    }
+    var wsPipe=XLSX.utils.aoa_to_sheet(pipeData);
+    wsPipe['!cols']=[{wch:8},{wch:10},{wch:18},{wch:15},{wch:22},{wch:28},{wch:45}];
+    XLSX.utils.book_append_sheet(wb,wsPipe,'Pipe Summary');
+
+    var fitData=[['Sl No','Pipe Size','Item Description','Qty','UOM','Brand','Specification']];
+    for(var j=0;j<d.fitRows.length;j++){
+      var fr=d.fitRows[j];
+      fitData.push([fr.sl,fr.sizeLabel,fr.item,fr.qty,'Nos',d.fitBrand,FIT_SPEC]);
+    }
+    var wsFit=XLSX.utils.aoa_to_sheet(fitData);
+    wsFit['!cols']=[{wch:8},{wch:10},{wch:28},{wch:10},{wch:8},{wch:22},{wch:28}];
+    XLSX.utils.book_append_sheet(wb,wsFit,'Fittings Summary');
+
+    for(var sidx=0;sidx<d.supportLines.length;sidx++){
+      var sl=d.supportLines[sidx];
+      var dataSheet=[
+        ['Support Detail', sl.name],
+        ['Support Type', TN[sl.type]],
+        ['Distance (Mtr)', sl.dist],
+        ['Supports', sl.supports],
+        [],
+        ['Sl No','Item Description','Qty','UOM','Category']
+      ];
+      var mk=Object.keys(sl.mat);
+      for(var m=0;m<mk.length;m++){
+        dataSheet.push([m+1,mk[m],sl.mat[mk[m]],'Nos',getCatLabel(mk[m])]);
+      }
+      var ws=XLSX.utils.aoa_to_sheet(dataSheet);
+      ws['!cols']=[{wch:8},{wch:40},{wch:10},{wch:8},{wch:14}];
+      var sheetName=('Support '+(sidx+1)).substring(0,31);
+      XLSX.utils.book_append_sheet(wb,ws,sheetName);
+    }
+
+    var grandData=[['Sl No','Item Description','Qty','UOM','Category']];
+    for(var g=0;g<d.supportGrandRows.length;g++){
+      var sgr=d.supportGrandRows[g];
+      grandData.push([sgr.sl,sgr.item,sgr.qty,'Nos',sgr.category]);
+    }
+    var wsGrand=XLSX.utils.aoa_to_sheet(grandData);
+    wsGrand['!cols']=[{wch:8},{wch:40},{wch:10},{wch:8},{wch:14}];
+    XLSX.utils.book_append_sheet(wb,wsGrand,'Support Grand Total');
+
+    XLSX.writeFile(wb,(d.projName||'project').replace(/\s+/g,'_')+'_Pipe_Fittings_Support.xlsx');
+  }catch(e){
+    alert('Excel export error: '+e.message);
+    console.error(e);
+  }
+};
+
+// =============================================
+// SAVE / LOAD
+// =============================================
+document.getElementById('btnSave').onclick=function(){
+  try{
+    var data=getProjectData();
+    var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=(data.projName||'project').replace(/\s+/g,'_')+'_pipe_fittings_support.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(e){
+    alert('Save error: '+e.message);
+    console.error(e);
+  }
+};
+
+document.getElementById('btnLoad').onclick=function(){
+  document.getElementById('fileImport').click();
+};
+
+document.getElementById('fileImport').onchange=function(e){
+  var file=e.target.files[0];
+  if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var data=JSON.parse(ev.target.result);
+      applyProjectData(data);
+      LAST_RESULT=null;
+      document.getElementById('results').innerHTML='';
+      document.getElementById('results').classList.remove('show');
+      alert('Project loaded successfully.');
+    }catch(err){
+      alert('Error loading file: '+err.message);
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+};
+
+// =============================================
 // BUTTONS
 // =============================================
 document.getElementById('btnAddRoute').onclick=function(){
@@ -953,6 +1355,7 @@ document.getElementById('btnReset').onclick=function(){
 
   R=[]; NID=0; R.push(newR()); drawRoutes();
 
+  LAST_RESULT=null;
   document.getElementById('results').innerHTML='';
   document.getElementById('results').classList.remove('show');
 };
