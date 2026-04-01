@@ -530,7 +530,7 @@ function flattenSupportGrand(grand){
 function getProjectData(){
   syncRoutes();
   return {
-    version:5,
+    version:6,
     standardPipe:PIPE_SPEC,
     standardFit:FIT_SPEC,
     projName:document.getElementById('projName').value,
@@ -751,7 +751,7 @@ function calcSupportForLine(name, dist, type, pipeEntries){
     }
     if(lg>0){
       addMat(mat,'10mm Nut',lg*nS*2);
-      addMat(mat,'10mm Bolt',lg*nS*2);
+      addMat(mat,'10mm x 20mm GI Bolt',lg*nS*2);
       addMat(mat,'10mm Washer',lg*nS*2);
     }
   }
@@ -760,7 +760,7 @@ function calcSupportForLine(name, dist, type, pipeEntries){
     var vt=VH*2, perS=hori+vt; cCh=perS*nS;
     addMat(mat,'C-Channel 41x41mm - 3m lengths',Math.ceil(cCh/OL));
     addMat(mat,'4-Hole L-Clamp',nS*2);
-    addMat(mat,'10mm x 20mm GL Bolt',nS*8);
+    addMat(mat,'10mm x 20mm GI Bolt',nS*8);
     addMat(mat,'10mm Spring Nut',nS*4);
     addMat(mat,'10mm Unifix',nS*4);
     ustraps();
