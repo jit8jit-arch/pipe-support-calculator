@@ -15,7 +15,7 @@
 }
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;line-height:1.5}
 .hdr{position:sticky;top:0;z-index:99;background:var(--c1);border-bottom:2px solid var(--am);padding:14px 20px}
-.hdr-in{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;gap:10px;flex-wrap:wrap}
+.hdr-in{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-i{width:42px;height:42px;border-radius:10px;background:var(--am);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#0b0e14}
 .logo h1{font-size:18px;font-weight:700}
@@ -121,6 +121,18 @@ table.mt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
         <small>BSEN 1452 PN 15 CLASS E / BSEN 1452-3 SCH 80</small>
       </div>
     </div>
+
+    <div class="tbar noprint" style="margin-bottom:0">
+      <button class="btn btn-am btn-sm" id="btnCalcTop">Calculate</button>
+      <button class="btn btn-gh btn-sm" id="btnResetTop">Reset</button>
+      <button class="btn btn-bl btn-sm" id="btnPdfTop">Export PDF</button>
+      <button class="btn btn-gn btn-sm" id="btnXlsxTop">Export Excel</button>
+      <button class="btn btn-gh btn-sm" onclick="window.print()">Print</button>
+      <button class="btn btn-gh btn-sm" id="btnSaveLocalTop">Save Local</button>
+      <button class="btn btn-gh btn-sm" id="btnLoadLocalTop">Load Local</button>
+      <button class="btn btn-gh btn-sm" id="btnSaveFileTop">Save File</button>
+      <button class="btn btn-gh btn-sm" id="btnLoadFileTop">Load File</button>
+    </div>
   </div>
 </header>
 
@@ -207,7 +219,7 @@ const SP=1.5, OL=300, GP=6, GE=3, VH=80;
 const TN={t1:'Full C-Channel Support',t2:'Threaded Rod + C-Channel',t3:'Threaded Rod + Rubber Clamp'};
 const BASE_PLATE_ITEM='BASE PLATE WITH DOUBLE FIX HDG, SFT 345, UNITECH';
 const BASE_PLATE_QTY_PER_SUPPORT=7;
-const LOCAL_INDEX_KEY='pfsc_multi_project_index_v1';
+const LOCAL_INDEX_KEY='pfsc_multi_project_index_v2';
 
 let SYSTEMS=[];
 let SYS_ID=0;
@@ -272,8 +284,8 @@ function flexibleItem(size){
 function reducerItem(fromSize,toSize){
   return `Reducer - ${P_INCH[fromSize]} x ${P_INCH[toSize]}`;
 }
-function linePipeRemark(sysName, label){ return `${sysName} - ${label}`; }
 function requiresMountKit(size){ return parseFloat(size)>=3; }
+
 function makeSystem(){
   SYS_ID++;
   return {
@@ -308,8 +320,7 @@ function makeSystem(){
       plantRoomMainInlet:{size:'2',distance:0},
       heatCoolMain:{size:'2',distance:0},
       freshWater:{size:'1',distance:18},
-      backwash:{size:'2',distance:0},
-      tankSuction:{size:'2',distance:0}
+      backwash:{size:'2',distance:0}
     },
     baseDrainLines:[
       {id:1,name:'Base Drain Suction 01',size:'2',distance:6}
@@ -320,9 +331,10 @@ function makeSystem(){
     additionalLines:[]
   };
 }
+
 function renderSystems(){
   const box=document.getElementById('systemsBox');
-  box.innerHTML=SYSTEMS.map((sys,si)=>{
+  box.innerHTML=SYSTEMS.map(sys=>{
     const sid=sys.id;
     return `
     <div class="card">
@@ -397,7 +409,6 @@ function renderSystems(){
             <button class="btn-ap noprint" onclick="addHeader(${sid})">+ Add Header</button>
             <div class="small-note">
               For each header, Tee count = linked equipment count, Reducer count = linked equipment count, End Cap = 2 Nos.
-              You can add both suction and delivery headers separately.
             </div>
           </div>
         </div>
@@ -430,8 +441,8 @@ function renderSystems(){
             <div class="row4" style="margin-top:14px">
               <div><label>Backwash Line Size</label><select id="sys_${sid}_line_backwash_size">${sizeOptions(sys.lines.backwash.size)}</select></div>
               <div><label>Backwash Line Distance</label><input type="number" id="sys_${sid}_line_backwash_distance" min="0" step="0.1" value="${sys.lines.backwash.distance}"></div>
-              <div><label>Tank Suction Size</label><select id="sys_${sid}_line_tankSuction_size">${sizeOptions(sys.lines.tankSuction.size)}</select></div>
-              <div><label>Tank Suction Distance</label><input type="number" id="sys_${sid}_line_tankSuction_distance" min="0" step="0.1" value="${sys.lines.tankSuction.distance}"></div>
+              <div></div>
+              <div></div>
             </div>
 
             <div class="plbl">Base Drain Suction Lines</div>
@@ -457,6 +468,7 @@ function renderSystems(){
     </div>`;
   }).join('');
 }
+
 function equipmentCardHtml(sid,key,title,obj){
   return `
   <div class="mini-card">
@@ -469,24 +481,46 @@ function equipmentCardHtml(sid,key,title,obj){
     <select id="sys_${sid}_eq_${key}_out">${sizeOptions(obj.outSize)}</select>
   </div>`;
 }
+
 function headerRowHtml(sid,h,idx){
   return `
-  <div class="prow">
-    <span class="pi">#${idx+1}</span>
-    <input type="text" id="sys_${sid}_hdr_${h.id}_name" value="${esc(h.name)}" style="flex:2;min-width:160px">
-    <select id="sys_${sid}_hdr_${h.id}_type" style="min-width:150px">
-      <option value="suction" ${h.type==='suction'?'selected':''}>Pump Suction Header</option>
-      <option value="delivery" ${h.type==='delivery'?'selected':''}>Pump Delivery Header</option>
-      <option value="custom" ${h.type==='custom'?'selected':''}>Custom Header</option>
-    </select>
-    <select id="sys_${sid}_hdr_${h.id}_size" style="min-width:90px">${sizeOptions(h.size)}</select>
-    <input type="number" id="sys_${sid}_hdr_${h.id}_length" min="0" step="0.1" value="${h.length}" placeholder="Length (m)" style="width:120px">
-    <select id="sys_${sid}_hdr_${h.id}_linked" style="min-width:170px">
-      ${linkedEquipmentOptions(h.linked)}
-    </select>
-    <button class="btn-x" type="button" onclick="removeHeader(${sid},${h.id})">&#10005;</button>
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-bd">
+      <div class="row5">
+        <div>
+          <label>Header Name</label>
+          <input type="text" id="sys_${sid}_hdr_${h.id}_name" value="${esc(h.name)}">
+        </div>
+        <div>
+          <label>Header Type</label>
+          <select id="sys_${sid}_hdr_${h.id}_type">
+            <option value="suction" ${h.type==='suction'?'selected':''}>Pump Suction Header</option>
+            <option value="delivery" ${h.type==='delivery'?'selected':''}>Pump Delivery Header</option>
+            <option value="custom" ${h.type==='custom'?'selected':''}>Custom Header</option>
+          </select>
+        </div>
+        <div>
+          <label>Header Size</label>
+          <select id="sys_${sid}_hdr_${h.id}_size">${sizeOptions(h.size)}</select>
+        </div>
+        <div>
+          <label>Header Length (m)</label>
+          <input type="number" id="sys_${sid}_hdr_${h.id}_length" min="0" step="0.1" value="${h.length}">
+        </div>
+        <div>
+          <label>Linked Equipment</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select id="sys_${sid}_hdr_${h.id}_linked" style="flex:1">
+              ${linkedEquipmentOptions(h.linked)}
+            </select>
+            <button class="btn-x" type="button" onclick="removeHeader(${sid},${h.id})">&#10005;</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>`;
 }
+
 function linkedEquipmentOptions(selected){
   const items=[
     ['filterPump','Filter Pump'],
@@ -500,7 +534,8 @@ function linkedEquipmentOptions(selected){
   ];
   return items.map(x=>`<option value="${x[0]}" ${x[0]===selected?'selected':''}>${x[1]}</option>`).join('');
 }
-function routeRowHtml(sid,r,idx){
+
+function routeRowHtml(sid,r){
   return `
   <div class="card" style="margin-bottom:12px">
     <div class="card-bd">
@@ -524,6 +559,7 @@ function routeRowHtml(sid,r,idx){
     </div>
   </div>`;
 }
+
 function routePipeRowHtml(sid,rid,p,pi){
   return `
   <div class="prow">
@@ -534,6 +570,7 @@ function routePipeRowHtml(sid,rid,p,pi){
     <button class="btn-x" type="button" onclick="removeRoutePipe(${sid},${rid},${pi})">&#10005;</button>
   </div>`;
 }
+
 function simpleLineRowHtml(sid,group,l,idx){
   return `
   <div class="prow">
@@ -544,6 +581,7 @@ function simpleLineRowHtml(sid,group,l,idx){
     <button class="btn-x" type="button" onclick="removeSimpleLine(${sid},'${group}',${l.id})">&#10005;</button>
   </div>`;
 }
+
 function addSystem(){ syncAll(); SYSTEMS.push(makeSystem()); renderSystems(); }
 function removeSystem(id){ if(SYSTEMS.length===1) return; syncAll(); SYSTEMS=SYSTEMS.filter(s=>s.id!==id); renderSystems(); }
 function addHeader(sid){ syncAll(); const s=findSystem(sid); if(!s) return; const nid=s.headers.length?Math.max(...s.headers.map(x=>x.id))+1:1; s.headers.push({id:nid,name:'New Header',type:'suction',size:'4',length:0,linked:'filterPump'}); renderSystems(); }
@@ -615,6 +653,7 @@ function syncAll(){
     }));
   }
 }
+
 function addValveAndPurpose(valveMap,valvePurpose,size,count,purpose){
   if(count<=0) return;
   addQty(valveMap,valveItem(size),count);
@@ -633,6 +672,7 @@ function addNRVAndPurpose(valveMap,valvePurpose,size,count,purpose,withMount=fal
     valvePurpose.push({item:`NRV Mounting Kit - ${P_INCH[size]} (Cepex, Spain)`,size:P_INCH[size],qty:count,purpose:purpose+' - Mounting Kit'});
   }
 }
+
 function addSupportForLine(name,dist,type,pipeEntries,addPlantRoomBasePlate,grand,details){
   if(dist<=0) return;
   const pipes=[];
@@ -689,7 +729,8 @@ function addSupportForLine(name,dist,type,pipeEntries,addPlantRoomBasePlate,gran
   Object.keys(mat).forEach(k=>addQty(grand,k,mat[k]));
   details.push({name,dist,type,mat,supports:nS});
 }
-function equipmentPipeLengthPerUnit(){ return 1.5; } // per side
+
+function equipmentPipeLengthPerUnit(){ return 1.5; }
 
 function calcProject(){
   syncAll();
@@ -729,27 +770,18 @@ function calcProject(){
     addFitting(fitMap,size,flexibleItem(size),count,'Weicco','');
   }
 
-  // systems
   for(const sys of SYSTEMS){
     const sysName=sys.name||'System';
 
-    // 1) Pool fittings
     addPoolFittingPoint(sysName,sys.fittings.inletSize,sys.fittings.inletCount,'Inlet',true);
     addPoolFittingPoint(sysName,sys.fittings.vacuumSize,sys.fittings.vacuumCount,'Vacuum Point',true);
     addPoolFittingPoint(sysName,sys.fittings.overflowSize,sys.fittings.overflowCount,'Overflow Drain',false);
     addPoolFittingPoint(sysName,sys.fittings.skimmerSize,sys.fittings.skimmerCount,'Skimmer',false);
     addPoolFittingPoint(sysName,sys.fittings.mainDrainSize,sys.fittings.mainDrainCount,'Main Drain',false);
 
-    // 2) Equipment
     const eq=sys.equipment;
-
     const pumpKeys=['filterPump','boosterPump','circulationPump','featurePump'];
-    const pumpTitles={
-      filterPump:'Filter Pump',
-      boosterPump:'Booster Pump',
-      circulationPump:'Circulation Pump',
-      featurePump:'Feature Pump'
-    };
+    const pumpTitles={filterPump:'Filter Pump',boosterPump:'Booster Pump',circulationPump:'Circulation Pump',featurePump:'Feature Pump'};
     for(const key of pumpKeys){
       const e=eq[key];
       if(e.count>0){
@@ -759,7 +791,6 @@ function calcProject(){
       }
     }
 
-    // Sand filters
     if(eq.sandFilter.count>0){
       addGenericConnectionSide(sysName,'Sand Filter',eq.sandFilter.inSize,eq.sandFilter.count,'In');
       addGenericConnectionSide(sysName,'Sand Filter',eq.sandFilter.outSize,eq.sandFilter.count,'Out');
@@ -767,14 +798,12 @@ function calcProject(){
       addValveAndPurpose(valveMap,valvePurpose,sys.lines.plantRoomMainInlet.size,1,`${sysName} - Sand Filter bypass valve (main inlet line size)`);
     }
 
-    // UV
     if(eq.uvUnit.count>0){
       addGenericConnectionSide(sysName,'UV Unit',eq.uvUnit.inSize,eq.uvUnit.count,'In');
       addGenericConnectionSide(sysName,'UV Unit',eq.uvUnit.outSize,eq.uvUnit.count,'Out');
       addValveAndPurpose(valveMap,valvePurpose,sys.lines.plantRoomMainInlet.size,1,`${sysName} - UV Unit bypass valve (main inlet line size)`);
     }
 
-    // Heat cool
     if(eq.heatCoolUnit.count>0){
       addGenericConnectionSide(sysName,'Heat Cool Unit',eq.heatCoolUnit.inSize,eq.heatCoolUnit.count,'In');
       addGenericConnectionSide(sysName,'Heat Cool Unit',eq.heatCoolUnit.outSize,eq.heatCoolUnit.count,'Out');
@@ -785,7 +814,6 @@ function calcProject(){
       addFitting(fitMap,'PAD','Antivibration Pad',eq.heatCoolUnit.count,'','');
     }
 
-    // Dosing
     if(eq.dosingUnit.count>0){
       addGenericConnectionSide(sysName,'Dosing Unit',eq.dosingUnit.inSize,eq.dosingUnit.count,'In');
       addGenericConnectionSide(sysName,'Dosing Unit',eq.dosingUnit.outSize,eq.dosingUnit.count,'Out');
@@ -793,7 +821,6 @@ function calcProject(){
       addAutoPipe(eq.dosingUnit.outSize,eq.dosingUnit.count*6,`${sysName} - Dosing Unit extra out pipe`,true);
     }
 
-    // 3) Headers
     sys.headers.forEach(h=>{
       if(h.length>0) addAutoPipe(h.size,h.length,`${sysName} - ${h.name}`,true);
       const linked=eq[h.linked];
@@ -806,7 +833,6 @@ function calcProject(){
       }
     });
 
-    // 4) Manual routes
     sys.routes.forEach(r=>{
       if(r.distance>0){
         r.pipes.forEach(p=>addPipe(pipeMap,p.size,r.distance*p.qty,`${sysName} - ${r.name}`));
@@ -814,32 +840,22 @@ function calcProject(){
       }
     });
 
-    // 5) Plant room / distance lines
     const plantLines = [
       {name:'Pump Suction Connection', size:sys.lines.pumpSuction.size, distance:sys.lines.pumpSuction.distance},
       {name:'Plant Room Main Inlet Line', size:sys.lines.plantRoomMainInlet.size, distance:sys.lines.plantRoomMainInlet.distance},
       {name:'Heat Cool Main Line', size:sys.lines.heatCoolMain.size, distance:sys.lines.heatCoolMain.distance},
       {name:'Fresh Water Line', size:sys.lines.freshWater.size, distance:sys.lines.freshWater.distance},
-      {name:'Backwash Line', size:sys.lines.backwash.size, distance:sys.lines.backwash.distance},
-      {name:'Tank Suction', size:sys.lines.tankSuction.size, distance:sys.lines.tankSuction.distance}
+      {name:'Backwash Line', size:sys.lines.backwash.size, distance:sys.lines.backwash.distance}
     ];
     plantLines.forEach(l=>{
       if(l.distance>0) addAutoPipe(l.size,l.distance,`${sysName} - ${l.name}`,true);
     });
 
-    // backwash
     if(sys.lines.backwash.distance>0){
       addValveAndPurpose(valveMap,valvePurpose,sys.lines.backwash.size,1,`${sysName} - Backwash line valve`);
       addNRVAndPurpose(valveMap,valvePurpose,sys.lines.backwash.size,1,`${sysName} - Backwash line check valve`,false);
     }
 
-    // tank suction
-    if(sys.lines.tankSuction.distance>0){
-      addValveAndPurpose(valveMap,valvePurpose,sys.lines.tankSuction.size,1,`${sysName} - Tank suction valve`);
-      addNRVAndPurpose(valveMap,valvePurpose,sys.lines.tankSuction.size,1,`${sysName} - Tank suction NRV`,true);
-    }
-
-    // base drain lines
     sys.baseDrainLines.forEach(l=>{
       if(l.distance>0){
         addAutoPipe(l.size,l.distance,`${sysName} - ${l.name}`,true);
@@ -847,7 +863,6 @@ function calcProject(){
       }
     });
 
-    // vacuum lines
     sys.vacuumLines.forEach(l=>{
       if(l.distance>0){
         addAutoPipe(l.size,l.distance,`${sysName} - ${l.name}`,true);
@@ -855,13 +870,11 @@ function calcProject(){
       }
     });
 
-    // additional custom lines
     sys.additionalLines.forEach(l=>{
       if(l.distance>0) addAutoPipe(l.size,l.distance,`${sysName} - ${l.name}`,true);
     });
   }
 
-  // Auto support for derived lines
   Object.keys(extraSupportPipeMap).forEach(size=>{
     const entries=extraSupportPipeMap[size];
     const totalLen=entries.reduce((a,b)=>a+b.length,0);
@@ -871,12 +884,10 @@ function calcProject(){
     }
   });
 
-  // merge valve map into fittings summary too
   Object.keys(valveMap).forEach(item=>{
     addFitting(fitMap,'VALVE',item,valveMap[item],'','');
   });
 
-  // flatten
   const pipeRows = Object.keys(pipeMap).sort((a,b)=>parseFloat(a)-parseFloat(b)).map((size,i)=>({
     sl:i+1,size,sizeLabel:P_INCH[size],length:pipeMap[size].length,pipeNos:Math.ceil(pipeMap[size].length/PIPE_LEN_PER_NO),remarks:(pipeMap[size].remarks||[]).join(' | ')
   }));
@@ -925,7 +936,7 @@ function renderResults(){
   }).join('');
 
   let supportDetailsHtml='';
-  d.supportDetails.forEach((sl,idx)=>{
+  d.supportDetails.forEach(sl=>{
     const rows=Object.keys(sl.mat).map((item,i)=>`<tr class="${getCatClass(item)}"><td class="center">${i+1}</td><td>${esc(item)}</td><td class="right q">${sl.mat[item]}</td><td class="center">Nos</td></tr>`).join('');
     supportDetailsHtml += `
     <div class="card">
@@ -995,11 +1006,10 @@ function renderResults(){
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ---------- Save / Load ----------
 function getProjectData(){
   syncAll();
   return {
-    version:9,
+    version:10,
     projName:strVal('projName'),
     projRef:strVal('projRef'),
     pipeBrand:strVal('pipeBrand'),
@@ -1047,7 +1057,6 @@ function showLocalProjectPicker(){
   if(name) loadProjectLocal(name);
 }
 
-// ---------- Exports ----------
 document.getElementById('btnPdf').onclick=function(){
   if(!LAST_RESULT){ alert('Please calculate first.'); return; }
   try{
@@ -1213,7 +1222,6 @@ document.getElementById('btnXlsx').onclick=function(){
   }catch(e){ alert('Excel export error: '+e.message); }
 };
 
-// ---------- File Save / Load ----------
 document.getElementById('btnSaveLocal').onclick=function(){ try{ saveProjectLocal(getProjectData()); }catch(e){ alert('Local save error: '+e.message); } };
 document.getElementById('btnLoadLocal').onclick=function(){ showLocalProjectPicker(); };
 document.getElementById('btnSaveFile').onclick=function(){
@@ -1246,7 +1254,6 @@ document.getElementById('fileImport').onchange=function(e){
   e.target.value='';
 };
 
-// ---------- Buttons ----------
 document.getElementById('btnAddSystem').onclick=function(){ addSystem(); };
 document.getElementById('btnCalc').onclick=calcProject;
 document.getElementById('btnReset').onclick=function(){
@@ -1262,7 +1269,15 @@ document.getElementById('btnReset').onclick=function(){
   document.getElementById('results').classList.remove('show');
 };
 
-// ---------- Init ----------
+document.getElementById('btnCalcTop').onclick = () => document.getElementById('btnCalc').click();
+document.getElementById('btnResetTop').onclick = () => document.getElementById('btnReset').click();
+document.getElementById('btnPdfTop').onclick = () => document.getElementById('btnPdf').click();
+document.getElementById('btnXlsxTop').onclick = () => document.getElementById('btnXlsx').click();
+document.getElementById('btnSaveLocalTop').onclick = () => document.getElementById('btnSaveLocal').click();
+document.getElementById('btnLoadLocalTop').onclick = () => document.getElementById('btnLoadLocal').click();
+document.getElementById('btnSaveFileTop').onclick = () => document.getElementById('btnSaveFile').click();
+document.getElementById('btnLoadFileTop').onclick = () => document.getElementById('btnLoadFile').click();
+
 SYSTEMS=[makeSystem()];
 renderSystems();
 </script>
